@@ -1,0 +1,91 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "JScrollTest",
+      "request": "launch",
+      "mainClass": "src.emp_data.JScrollTest",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "empform",
+      "request": "launch",
+      "mainClass": "src.emp_data.empform",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "PrintInfo",
+      "request": "launch",
+      "mainClass": "src.emp_data.PrintInfo",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "emp_form",
+      "request": "launch",
+      "mainClass": "src.emp_data.emp_form",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "Info_input",
+      "request": "launch",
+      "mainClass": "src.emp_data.Info_input",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "Emp_form",
+      "request": "launch",
+      "mainClass": "src.emp_data.Emp_form",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "LoginTest",
+      "request": "launch",
+      "mainClass": "src.loginpage.LoginTest",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "Info_input",
+      "request": "launch",
+      "mainClass": "src.staff_data.Info_input",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "MainApp",
+      "request": "launch",
+      "mainClass": "MainApp",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "Current File",
+      "request": "launch",
+      "mainClass": "${file}"
+    },
+    {
+      "type": "java",
+      "name": "MainApp",
+      "request": "launch",
+      "mainClass": "src.MainApp",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "LoginTest",
+      "request": "launch",
+      "mainClass": "loginpage.LoginTest",
+      "projectName": "Attendance V1_b87b8139"
+    }
+  ]
+}

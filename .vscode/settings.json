@@ -1,0 +1,13 @@
+{
+  "java.project.sourcePaths": ["src"],
+  "java.project.outputPath": "bin",
+  "java.project.referencedLibraries": [
+    "lib/**/*.jar",
+    "jar/mssql-jdbc-12.6.3.jre8.jar",
+    "jar/mssql-jdbc-12.6.3.jre8-javadoc.jar",
+    "jar/mssql-jdbc-12.6.3.jre8-sources.jar",
+    "jar/mssql-jdbc-12.6.3.jre11.jar",
+    "jar/mssql-jdbc-12.6.3.jre11-javadoc.jar",
+    "jar/mssql-jdbc-12.6.3.jre11-sources.jar"
+  ]
+}

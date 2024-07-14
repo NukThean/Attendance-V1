@@ -10,7 +10,8 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class empform extends JPanel {
-  private JTable table;
+  public JTable table;
+  private DefaultTableModel tableModel;
   private JScrollPane scrollpane;
 
   public empform() {
@@ -55,7 +56,7 @@ public class empform extends JPanel {
         {"ID", "FIRST NAME", "LAST NAME", "PHONE", "EMAIL", "NID", "POSITION", "DEPARTMENT"};
 
     // Initialize the table with a DefaultTableModel
-    DefaultTableModel tableModel = new DefaultTableModel(column, 0);
+    tableModel = new DefaultTableModel(column, 0);
     table = new JTable(tableModel);
     table.setBackground(Color.WHITE);
     table.setForeground(Color.BLACK);
@@ -99,11 +100,13 @@ public class empform extends JPanel {
     add(mainpanel, BorderLayout.CENTER);
 
     // Fetch data from database and populate the table
-    populateTable(tableModel);
+    populateTable();
+    // populateTable(tableModel);
   }
 
   // Method to fetch employee information from the database and populate the table
-  private void populateTable(DefaultTableModel tableModel) {
+  public void populateTable() {
+    tableModel.setRowCount(0);
     String dbURL =
         "jdbc:sqlserver://NUKTHEAN\\DBSERVER;databaseName=ATTENDANCE_SYSTEM;encrypt=true;trustServerCertificate=true";
     String user = "sa";
@@ -163,6 +166,7 @@ public class empform extends JPanel {
         e.printStackTrace();
       }
     }
+    // tableModel.fireTableDataChanged();
   }
 
   // Method to adjust column widths

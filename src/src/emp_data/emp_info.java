@@ -10,6 +10,7 @@ public class emp_info {
   private String position;
   private String department;
 
+  // data for use with arraylist in empform and Info_input
 
   public emp_info(int id, String firstName, String lastName, int phone, String email, int nid,
       String position, String department) {

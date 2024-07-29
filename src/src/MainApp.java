@@ -1,14 +1,11 @@
 package src;
 
 import src.dashboard.sidebar;
-import src.emp_data.empform;
 import src.dashboard.center;
-import src.loginpage.LoginTest;
+import src.loginpage.AdminLogin;
 import src.reportbt.reportform;
-import src.attendance.attform; // Import the attendance form class
-
-// using gridbag layout with some borderlayout as sub layout
-// ipady. ipadx,weighty, weightx, gridwidth
+import src.attendance.attform;
+import src.emp_data.*;
 import javax.swing.*;
 import java.awt.*;
 
@@ -18,32 +15,23 @@ public class MainApp extends JFrame {
   private JPanel mainPanel;
 
   public MainApp() {
-    // calling the left and center classes
+    // Initialize the panels
     sidebar leftPanel = new sidebar(this);
     center centerPanel = new center();
-    empform employeePanel = new empform(); // Create an instance
-                                           // of empform
+    EmpTable employeePanel = new EmpTable(); // Create an instance of empform
     attform attendancePanel = new attform(); // Create an instance of attform
     reportform reportPanel = new reportform();
-
 
     cardLayout = new CardLayout();
     mainPanel = new JPanel(cardLayout);
 
-    // Add the center panel (Dashboard) to the CardLayout panel
+    // Add the panels to the CardLayout panel
     mainPanel.add(centerPanel, "Dashboard");
-
-    // Add the employee panel to the CardLayout panel
     mainPanel.add(employeePanel, "Employee");
-
-    // Add the attendance panel to the CardLayout panel
     mainPanel.add(attendancePanel, "Attendance");
-
-    // Add the report panel to the CardLayout panel
     mainPanel.add(reportPanel, "Report");
 
     // Add placeholders for other forms (panels)
-    // mainPanel.add(new JPanel(), "Report");
     mainPanel.add(new JPanel(), "Help");
     mainPanel.add(new JPanel(), "Setting");
 
@@ -62,7 +50,7 @@ public class MainApp extends JFrame {
     setLocationRelativeTo(null);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(true);
-    setVisible(false);
+    setVisible(false); // Set visible to true
 
     // Show the dashboard by default
     cardLayout.show(mainPanel, "Dashboard");
@@ -75,7 +63,6 @@ public class MainApp extends JFrame {
 
   public static void main(String[] args) {
     MainApp mainApp = new MainApp(); // Create MainApp instance
-    new LoginTest(mainApp); // Pass the MainApp reference to LoginTest
+    new AdminLogin(mainApp); // Pass the MainApp reference to LoginTest
   }
-
 }

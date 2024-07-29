@@ -6,6 +6,55 @@
   "configurations": [
     {
       "type": "java",
+      "name": "EmpInput",
+      "request": "launch",
+      "mainClass": "src.emp_data.EmpInput",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "UserLogin",
+      "request": "launch",
+      "mainClass": "src.loginpage.UserLogin",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "AdminLogin",
+      "request": "launch",
+      "mainClass": "src.loginpage.AdminLogin",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "EmpAmend",
+      "request": "launch",
+      "mainClass": "src.emp_data.EmpAmend",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "userPage",
+      "request": "launch",
+      "mainClass": "src.userPage.userPage",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "EmpTable",
+      "request": "launch",
+      "mainClass": "src.emp_data.EmpTable",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "FileA",
+      "request": "launch",
+      "mainClass": "src.FileA",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
       "name": "JScrollTest",
       "request": "launch",
       "mainClass": "src.emp_data.JScrollTest",

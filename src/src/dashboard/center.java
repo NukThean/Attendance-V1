@@ -14,7 +14,7 @@ public class center extends JPanel implements ActionListener {
   int day = today.getDayOfMonth();
   int month = today.getMonthValue();
   int year = today.getYear();
-  int StaffCount = Info_input.getStaffCount();
+  int StaffCount = EmpTable.getStaffCount();
   // ------------------------------------------
   private JLabel txttop1 = new JLabel("Dashboard");
   private JLabel txttop2 = new JLabel("HR Department");

@@ -11,5 +11,10 @@
     "jar/mssql-jdbc-12.6.3.jre11-sources.jar",
     "jar/bcrypt-0.10.2.jar",
     "jar/bytes-1.5.0.jar"
-  ]
+  ],
+  "editor.fontFamily": "Fira Code",
+  "editor.fontWeight": "450",
+  "editor.fontLigatures": true,
+  "terminal.integrated.fontFamily": "monospace",
+  "editor.fontSize": 13
 }

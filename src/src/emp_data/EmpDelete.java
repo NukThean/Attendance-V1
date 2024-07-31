@@ -8,12 +8,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.*;
-import src.DatabaseConnection;
+
 import java.awt.*;
 
 public class EmpDelete extends EmpInput {
   public EmpDelete() {
-
   }
 
   public void showDeleteDialog() {
@@ -35,7 +34,6 @@ public class EmpDelete extends EmpInput {
       }
     });
   }
-
 
   private void handleDeletion(int id) {
     // Implement the logic to handle the deletion using the provided ID
@@ -182,7 +180,6 @@ public class EmpDelete extends EmpInput {
       pstmt2 = conn.prepareStatement(sql2);
       pstmt = conn.prepareStatement(sql);
 
-
       // Set the parameter for the delete
       pstmt2.setInt(1, id);
       pstmt.setInt(1, id);
@@ -190,7 +187,6 @@ public class EmpDelete extends EmpInput {
       // Execute the delete
       pstmt2.executeUpdate();
       pstmt.executeUpdate();
-
 
       System.out.println("Staff with ID " + id + " deleted successfully!");
 

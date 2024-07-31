@@ -2,7 +2,6 @@ package src.userPage;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import src.DatabaseConnection;
 import src.loginpage.User;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,7 +12,7 @@ import src.utils.*;
 
 public class viewRecord extends JFrame implements ActionListener {
   // private User user;
-  String[] column = {"att_id", "date", "check_in_time", "check_out_time"};
+  String[] column = { "att_id", "date", "check_in_time", "check_out_time" };
 
   private JTable table;
   private DefaultTableModel tableModel;

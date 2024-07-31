@@ -11,6 +11,7 @@ CREATE TABLE Employees (
     employee_id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     first_name VARCHAR(20) NOT NULL,
     last_name VARCHAR(20) NOT NULL,
+    sex VARCHAR(1) NOT NULL,
     department VARCHAR(35),
     position VARCHAR(35),
     email VARCHAR(50),
@@ -45,9 +46,32 @@ CREATE TABLE [User] (
 );
 GO
 
+-- Create the Leaves table
+CREATE TABLE Leaves (
+    leave_id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    employee_id INT NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    reason VARCHAR(70),
+    status VARCHAR(10),
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
+);
+GO
+
+CREATE TABLE Attendance (
+	attendance_id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	employee_id INT NOT NULL,
+	date DATE NOT NULL,
+    check_in_time TIME,
+    check_out_time TIME,
+    status VARCHAR(20) DEFAULT 'active',
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
+);
+GO
+
 -- Insert an employee for the admin role
-INSERT INTO Employees (first_name, last_name, department, position, email, phone, nid)
-VALUES ('CHEA', 'NUKTHEAN', 'CEO', 'CEO', 'admin@example.com1', '1234567890', '123456789');
+INSERT INTO Employees (first_name, last_name, sex, department, position, email, phone, nid)
+VALUES ('CHEA', 'NUKTHEAN','M', 'CEO', 'CEO', 'admin@example.com1', '1234567890', '123456789');
 
 -- Get the employee_id of the newly inserted admin employee
 DECLARE @admin_employee_id INT = SCOPE_IDENTITY();
@@ -63,8 +87,8 @@ INSERT INTO [User] (user_id, password, role)
 VALUES (@admin_user_id, CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', '1'), 2), 'user');
 
 -- Insert an employee for the user role
-INSERT INTO Employees (first_name, last_name, department, position, email, phone, nid)
-VALUES ('BERN', 'ERN', 'Development', 'Developer', 'user@example.com1', '0987654321', '987654321');
+INSERT INTO Employees (first_name, last_name,sex, department, position, email, phone, nid)
+VALUES ('BERN', 'ERN','M', 'Development', 'Developer', 'user@example.com1', '0987654321', '987654321');
 
 -- Get the employee_id of the newly inserted user employee
 DECLARE @user_employee_id INT = SCOPE_IDENTITY();

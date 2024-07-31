@@ -10,7 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import src.DatabaseConnection;
+
+import src.utils.DatabaseConnection;
 import src.utils.TableUtils;
 
 public class EmpTable extends JPanel implements ActionListener {
@@ -19,22 +20,20 @@ public class EmpTable extends JPanel implements ActionListener {
   JButton btnamend = new JButton("Amend");
   JButton btnremove = new JButton("Remove");
   JButton btnsearch = new JButton("Search");
-  JButton btnsort = new JButton("Sort"); // sort for the best attendance and sort by department
+  JButton btnsort = new JButton("Sort");
   JButton btnback = new JButton("Back");
 
   private static JTable table;
   private DefaultTableModel tableModel;
   private JScrollPane scrollpane;
-  int i = 0; // for count time refresh every 5sec
 
-  String[] column = {"ID", "FIRST NAME", "LAST NAME", "PHONE", "EMAIL", "POSITION", "DEPARTMENT"};
+  String[] column = { "ID", "FIRST NAME", "LAST NAME", "PHONE", "EMAIL", "POSITION", "DEPARTMENT" };
 
   public EmpTable() {
     setLayout(new BorderLayout()); // Use BorderLayout for main panel
     JPanel mainpanel = new JPanel(new BorderLayout());
     JPanel buttonpanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 6)); // Using FlowLayout
     JPanel northpanel = new JPanel(new GridBagLayout());
-
 
     northpanel.setPreferredSize(new Dimension(894, 80));
     buttonpanel.setPreferredSize(new Dimension(864, 40));
@@ -49,7 +48,6 @@ public class EmpTable extends JPanel implements ActionListener {
     err.gridy = 0;
 
     Font customFont = new Font("Times New Roman", Font.PLAIN, 15);
-
 
     // Apply custom font to buttons
     btnadd.setFont(customFont);
@@ -99,9 +97,6 @@ public class EmpTable extends JPanel implements ActionListener {
     // Set up the auto-refresh timer
     Timer refreshTimer = new Timer(5000, e -> populateTable());
     refreshTimer.start();
-
-    // Fetch initial data
-    populateTable();
   }
 
   public void populateTable() {
@@ -110,16 +105,13 @@ public class EmpTable extends JPanel implements ActionListener {
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-    i++;
 
     try {
       // Establish the connection
       conn = DatabaseConnection.getConnection();
-      // System.out.println("empform: load populateTable " + i);
 
       // Prepare the SQL SELECT statement
-      String sql =
-          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, POSITION, DEPARTMENT FROM Employees";
+      String sql = "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, POSITION, DEPARTMENT FROM Employees";
 
       // Create the PreparedStatement
       pstmt = conn.prepareStatement(sql);
@@ -135,14 +127,10 @@ public class EmpTable extends JPanel implements ActionListener {
         row.add(rs.getString("LAST_NAME"));
         row.add(rs.getString("PHONE"));
         row.add(rs.getString("EMAIL"));
-        // row.add(rs.getString("NID"));
         row.add(rs.getString("POSITION"));
         row.add(rs.getString("DEPARTMENT"));
         tableModel.addRow(row.toArray());
       }
-
-      // Adjust column widths after populating the table
-      // adjustColumnWidths();
 
     } catch (SQLException e) {
       e.printStackTrace();
@@ -163,7 +151,6 @@ public class EmpTable extends JPanel implements ActionListener {
       }
     }
   }
-
 
   @Override
   public void actionPerformed(ActionEvent e) {
@@ -198,19 +185,13 @@ public class EmpTable extends JPanel implements ActionListener {
   }
 
   public static void main(String[] args) {
-    // Create a new JFrame
-    JFrame frame = new JFrame("Employee Table");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setLocationRelativeTo(null);
-    frame.setSize(900, 700); // Set frame size
-
-    // Create an instance of EmpTable
     EmpTable empTable = new EmpTable();
 
-    // Add the EmpTable instance to the frame
+    JFrame frame = new JFrame("Employee Table");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setSize(900, 700); // Set frame size
     frame.add(empTable);
-
-    // Set the frame's visibility to true
+    frame.setLocationRelativeTo(null);
     frame.setVisible(true);
   }
 

@@ -1,6 +1,5 @@
 package src.emp_data;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -9,7 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.*;
-import src.DatabaseConnection;
+import src.loginpage.User;
+import src.utils.DatabaseConnection;
 import java.awt.*;
 
 public class EmpInput extends JFrame implements ActionListener {
@@ -27,7 +27,6 @@ public class EmpInput extends JFrame implements ActionListener {
   JButton btnmore = new JButton("Add more");
   JButton btnfinish = new JButton("Finish");
 
-
   JTextField txtname1 = new JTextField();
   JTextField txtname2 = new JTextField();
   JTextField txtphone = new JTextField();
@@ -38,6 +37,7 @@ public class EmpInput extends JFrame implements ActionListener {
   JTextField txtid = new JTextField();
 
   public EmpInput() {
+
     setLayout(new BorderLayout());
     JPanel main = new JPanel(new BorderLayout());
     JPanel ccenter = new JPanel(new GridBagLayout());
@@ -45,8 +45,6 @@ public class EmpInput extends JFrame implements ActionListener {
 
     main.setPreferredSize(new Dimension(864, 688));
     south.setPreferredSize(new Dimension(0, 40));
-
-
 
     Font customFont = new Font("Times New Roman", Font.PLAIN, 16);
 
@@ -65,7 +63,6 @@ public class EmpInput extends JFrame implements ActionListener {
     nghz.weighty = 1;
     nghz.gridx = 0;
     nghz.gridy = 0;
-
 
     lblname1.setFont(customFont);
     lblname2.setFont(customFont);
@@ -93,7 +90,6 @@ public class EmpInput extends JFrame implements ActionListener {
     btnmore.addActionListener(this);
     btnfinish.addActionListener(this);
 
-
     err.insets = new Insets(5, 15, 0, 310);
     addlabeltopanel(ccenter, lblname1, err, 0, 0);
     err.insets = new Insets(10, 15, 5, 310);
@@ -105,8 +101,6 @@ public class EmpInput extends JFrame implements ActionListener {
     addlabeltopanel(ccenter, lbldep, err, 0, 1);
     addlabeltopanel(ccenter, lblposition, err, 1, 1);
     addlabeltopanel(ccenter, lblid, err, 2, 1); // Add lblid to the panel
-
-
 
     nghz.insets = new Insets(10, 120, 5, 0);
     addtxtfieldtopanel(ccenter, txtname1, nghz, 0, 0);
@@ -133,7 +127,6 @@ public class EmpInput extends JFrame implements ActionListener {
 
     loadDepartments();
 
-
     txtname1.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -147,7 +140,6 @@ public class EmpInput extends JFrame implements ActionListener {
         txtphone.requestFocus();
       }
     });
-
 
     txtphone.addActionListener(new ActionListener() {
       @Override
@@ -180,13 +172,13 @@ public class EmpInput extends JFrame implements ActionListener {
   }
 
   private void loadDepartments() {
-    // Sample departments, replace with actual department names from your database or configuration
-    String[] departments = {"HR", "Finance", "IT", "Marketing"};
+    // Sample departments, replace with actual department names from your database
+    // or configuration
+    String[] departments = User.getDepartment();
     for (String dep : departments) {
       cmbdep.addItem(dep);
     }
   }
-
 
   private void addlabeltopanel(JPanel panell, JLabel Label, GridBagConstraints err, int gridy,
       int gridx) {
@@ -257,9 +249,8 @@ public class EmpInput extends JFrame implements ActionListener {
       System.out.println("Info_input_insert: Connected to the database");
 
       // Prepare the SQL INSERT statement for Employees
-      String sql =
-          "INSERT INTO Employees (FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT) "
-              + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+      String sql = "INSERT INTO Employees (FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT) "
+          + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
       // Create the PreparedStatement
       pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -283,8 +274,7 @@ public class EmpInput extends JFrame implements ActionListener {
           int employeeId = rs.getInt(1); // Retrieve the ID
 
           // Insert corresponding user role into the User table
-          String userSql =
-              "INSERT INTO [User] (role, last_login, user_id) " + "VALUES (?, GETDATE(), ?)";
+          String userSql = "INSERT INTO [User] (role, last_login, user_id) " + "VALUES (?, GETDATE(), ?)";
           try (PreparedStatement userPstmt = conn.prepareStatement(userSql)) {
             // userPstmt.setString(1, "1"); // Set the password
             userPstmt.setString(1, "user"); // Set the role
@@ -316,8 +306,6 @@ public class EmpInput extends JFrame implements ActionListener {
       }
     }
   }
-
-
 
   @Override
   public void actionPerformed(ActionEvent e) {

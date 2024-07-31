@@ -1,8 +1,10 @@
 package src.userPage;
 
 import javax.swing.*;
-import src.DatabaseConnection;
+
 import src.loginpage.User;
+import src.utils.DatabaseConnection;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.sql.*;
@@ -95,8 +97,7 @@ public class userPage extends JFrame {
   }
 
   private void checkIn(int userId) {
-    String sql =
-        "INSERT INTO Attendance (employee_id, date, check_in_time, status) VALUES (?, ?, ?, ?)";
+    String sql = "INSERT INTO Attendance (employee_id, date, check_in_time, status) VALUES (?, ?, ?, ?)";
 
     try (Connection conn = DatabaseConnection.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -119,10 +120,8 @@ public class userPage extends JFrame {
   }
 
   private void checkOut(int userId) {
-    String selectSql =
-        "SELECT TOP 1 attendance_id FROM Attendance WHERE employee_id = ? ORDER BY attendance_id DESC";
-    String updateSql =
-        "UPDATE Attendance SET check_out_time = ?, status = ? WHERE attendance_id = ?";
+    String selectSql = "SELECT TOP 1 attendance_id FROM Attendance WHERE employee_id = ? ORDER BY attendance_id DESC";
+    String updateSql = "UPDATE Attendance SET check_out_time = ?, status = ? WHERE attendance_id = ?";
 
     try (Connection conn = DatabaseConnection.getConnection();
         PreparedStatement selectStmt = conn.prepareStatement(selectSql);
@@ -155,8 +154,7 @@ public class userPage extends JFrame {
   }
 
   private boolean isStatusActive(int userId) {
-    String sql =
-        "SELECT TOP 1 status FROM Attendance WHERE employee_id = ? ORDER BY attendance_id DESC";
+    String sql = "SELECT TOP 1 status FROM Attendance WHERE employee_id = ? ORDER BY attendance_id DESC";
 
     try (Connection conn = DatabaseConnection.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {

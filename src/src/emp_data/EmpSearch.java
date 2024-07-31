@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import src.DatabaseConnection;
+
+import src.utils.DatabaseConnection;
 import src.utils.DialogUtils;
 import src.utils.TableUtils;
 
@@ -21,13 +22,11 @@ public class EmpSearch extends JFrame implements ActionListener {
   private static EmpSearch empsearch;
   private static TableUtils tableutil = new TableUtils(); // Create an instance of EmpTable
 
-  private static String[] column =
-      {"ID", "FIRST NAME", "LAST NAME", "PHONE", "EMAIL", "NID", "POSITION", "DEPARTMENT"};
+  private static String[] column = { "ID", "FIRST NAME", "LAST NAME", "PHONE", "EMAIL", "NID", "POSITION",
+      "DEPARTMENT" };
 
   public EmpSearch() {
     empsearch = this;
-
-
 
     tableModelSearch = tableutil.getTableModel(column);
     tableResult = tableutil.getTable(tableModelSearch);
@@ -35,7 +34,6 @@ public class EmpSearch extends JFrame implements ActionListener {
 
     setLayout(new BorderLayout()); // Use BorderLayout for main panel
     JPanel mainpanel = new JPanel(new BorderLayout());
-
 
     mainpanel.setPreferredSize(new Dimension(864, 688));
     mainpanel.add(paneResult, BorderLayout.CENTER);
@@ -52,9 +50,7 @@ public class EmpSearch extends JFrame implements ActionListener {
     TableUtils.adjustColumnWidth(tableResult, 0, 30);
     TableUtils.adjustColumnWidth(tableResult, 3, 65);
 
-
   }
-
 
   public static void searchByName(String name) {
 
@@ -69,10 +65,8 @@ public class EmpSearch extends JFrame implements ActionListener {
 
       // Prepare the SQL INSERT statement
       // Prepare the SQL SELECT statement with LIKE clause
-      String sql =
-          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
-              + "FROM Employees " + "WHERE FIRST_NAME LIKE ? OR LAST_NAME LIKE ?";
-
+      String sql = "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
+          + "FROM Employees " + "WHERE FIRST_NAME LIKE ? OR LAST_NAME LIKE ?";
 
       pstmt = conn.prepareStatement(sql);
       String searchPattern = "%" + name + "%"; // Pattern for partial match
@@ -134,9 +128,8 @@ public class EmpSearch extends JFrame implements ActionListener {
       System.out.println("SearchByID: Connected to the database");
 
       // Prepare the SQL INSERT statement
-      String sql =
-          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
-              + "FROM Employees WHERE EMPLOYEE_ID = ?";
+      String sql = "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
+          + "FROM Employees WHERE EMPLOYEE_ID = ?";
       pstmt = conn.prepareStatement(sql);
       pstmt.setInt(1, id); // Set the ID parameter
       rs = pstmt.executeQuery();
@@ -158,7 +151,6 @@ public class EmpSearch extends JFrame implements ActionListener {
       empsearch.setVisible(true);
 
       System.out.println("Sucessful Seach Employee with ID " + id);
-
 
     } catch (SQLException e) {
       e.printStackTrace();
@@ -288,7 +280,6 @@ public class EmpSearch extends JFrame implements ActionListener {
     byIDButton.addActionListener(this);
     byNameButton.addActionListener(this);
 
-    frame.setLocationRelativeTo(null);
     Image icon = Toolkit.getDefaultToolkit().getImage("D:\\Attandance V1\\img\\naga.png");
     frame.setIconImage(icon);
     frame.add(panel1, BorderLayout.CENTER);

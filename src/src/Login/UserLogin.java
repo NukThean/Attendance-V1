@@ -1,10 +1,13 @@
-package src.loginpage;
+package src.Login;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import src.MainApp;
+
 import src.dashboard.img;
+import src.loginpage.AdminMain;
+import src.loginpage.User;
+import src.loginpage.UserDatabase;
 import src.userPage.userPage;
 
 public class UserLogin extends JFrame implements ActionListener {
@@ -16,12 +19,11 @@ public class UserLogin extends JFrame implements ActionListener {
   private JPasswordField txtPw = new JPasswordField();
   private JCheckBox showpw = new JCheckBox("Show Password?");
   private JButton btnLogin = new JButton("Login");
-  private MainApp mainApp;
+  private AdminMain mainApp;
   private userPage userPanel;
   int error = 0;
 
-  public UserLogin(MainApp mainApp) {
-    this.mainApp = mainApp;
+  public UserLogin() {
     setLayout(new BorderLayout());
     img graphic = new img();
 
@@ -310,14 +312,7 @@ public class UserLogin extends JFrame implements ActionListener {
     }
   }
 
-
   public static void main(String[] args) {
-    SwingUtilities.invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        MainApp mainApp = new MainApp(); // Ensure MainApp is properly implemented and imported
-        new UserLogin(mainApp).setVisible(true);
-      }
-    });
+    new UserLogin();
   }
 }

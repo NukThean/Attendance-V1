@@ -5,6 +5,7 @@ public class User {
   private String password;
   private Role role;
   private String name; // Add this field
+  private static String[] department = { "HR", "Finance", "IT", "Marketing" };
 
   // Constructor
   public User(int userId, String password, Role role, String name) {
@@ -37,6 +38,10 @@ public class User {
 
   public String getName() {
     return name;
+  }
+
+  public static String[] getDepartment() {
+    return department;
   }
 
 }

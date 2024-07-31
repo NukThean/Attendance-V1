@@ -10,16 +10,16 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
 public class TableUtils extends JPanel {
-  private static JTable table;
-  private DefaultTableModel tableModel;
-  private JScrollPane scrollpane;
+  // private static JTable table;
+  // private DefaultTableModel tableModel;
+  // private JScrollPane scrollpane;
 
   public TableUtils() {
 
-    table = getTable(tableModel);
+    // table = getTable(tableModel);
 
     // Create JScrollPane with JTable
-    scrollpane = getScrollPane(table);
+    // scrollpane = getScrollPane(table);
   }
 
   public DefaultTableModel getTableModel(String[] column) {
@@ -106,7 +106,6 @@ public class TableUtils extends JPanel {
     column.setMaxWidth(width);
   }
 
-
   private static JLabel createCornerLabel() {
     JLabel cornerLabel = new JLabel("");
     cornerLabel.setBackground(Color.LIGHT_GRAY);
@@ -118,8 +117,7 @@ public class TableUtils extends JPanel {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
         boolean hasFocus, int row, int column) {
-      Component c =
-          super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+      Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
       if (!isSelected) {
         if (row % 2 == 0) { // Highlight gray and white in table
           c.setBackground(Color.LIGHT_GRAY);
@@ -145,8 +143,7 @@ public class TableUtils extends JPanel {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
         boolean hasFocus, int row, int column) {
-      Component c =
-          super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+      Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
       c.setBackground(new Color(15, 41, 102));
       c.setForeground(Color.WHITE);
       return c;

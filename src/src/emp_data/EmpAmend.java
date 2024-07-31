@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.*;
-import src.DatabaseConnection;
+
 import java.awt.*;
 
 public class EmpAmend extends EmpInput {
@@ -30,7 +30,6 @@ public class EmpAmend extends EmpInput {
         amendFrame.txtphone, amendFrame.txtemail, amendFrame.txtnid, amendFrame.txtposition,
         amendFrame.cmbdep);
   }
-
 
   public void showAmendDialog() {
     if (!isDialogOpen) {
@@ -67,8 +66,7 @@ public class EmpAmend extends EmpInput {
       conn = DatabaseConnection.getConnection();
       System.out.println("Info_input_getStaffInfo: Connected to the database");
 
-      String sql =
-          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT FROM Employees WHERE EMPLOYEE_ID = ?";
+      String sql = "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT FROM Employees WHERE EMPLOYEE_ID = ?";
 
       pstmt = conn.prepareStatement(sql);
       pstmt.setInt(1, id);
@@ -121,8 +119,7 @@ public class EmpAmend extends EmpInput {
       conn = DatabaseConnection.getConnection();
       System.out.println("Info_input_update: Connected to the database");
 
-      String sql =
-          "UPDATE Employees SET FIRST_NAME = ?, LAST_NAME = ?, PHONE = ?, EMAIL = ?, NID = ?, POSITION = ?, DEPARTMENT = ? WHERE EMPLOYEE_ID = ?";
+      String sql = "UPDATE Employees SET FIRST_NAME = ?, LAST_NAME = ?, PHONE = ?, EMAIL = ?, NID = ?, POSITION = ?, DEPARTMENT = ? WHERE EMPLOYEE_ID = ?";
 
       pstmt = conn.prepareStatement(sql);
 

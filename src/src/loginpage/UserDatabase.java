@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import src.DatabaseConnection;
+import src.utils.DatabaseConnection;
 
 public class UserDatabase {
   private static String name;
@@ -64,9 +64,7 @@ public class UserDatabase {
       e.printStackTrace();
     }
     return user;
-
   }
-
 
   private static void updatePassword(int userId, String newPassword) {
     String sql = "UPDATE [User] SET password = ? WHERE user_id = ?";

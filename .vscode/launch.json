@@ -6,6 +6,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "AdminLogin",
+      "request": "launch",
+      "mainClass": "src.Login.AdminLogin",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "UserLogin",
+      "request": "launch",
+      "mainClass": "src.Login.UserLogin",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
       "name": "EmpInput",
       "request": "launch",
       "mainClass": "src.emp_data.EmpInput",

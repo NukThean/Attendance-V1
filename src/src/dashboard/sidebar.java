@@ -1,10 +1,12 @@
 package src.dashboard;
 
 import javax.swing.*;
+
+import src.loginpage.AdminMain;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import src.MainApp;
 
 public class sidebar extends JPanel implements ActionListener {
   private JButton btnDb = new JButton("Dashboard");
@@ -16,9 +18,9 @@ public class sidebar extends JPanel implements ActionListener {
   private JButton btnExit = new JButton("Exit");
   private JLabel icon = new JLabel(new ImageIcon("D:\\Attandance V1\\img\\Rupp_logo.png"));
   private JButton selectedButton; // Track the selected button
-  private MainApp mainApp; // Reference to MainApp
+  private AdminMain mainApp; // Reference to MainApp
 
-  public sidebar(MainApp mainApp) {
+  public sidebar(AdminMain mainApp) {
     this.mainApp = mainApp;
 
     setLayout(new BorderLayout());
@@ -114,7 +116,7 @@ public class sidebar extends JPanel implements ActionListener {
 
       // Switch panel based on button pressed
       String panelName = sourceButton.getText();
-      mainApp.switchPanel(panelName);
+      mainApp.switchPanel(panelName); // call switchPanel in AdminMain
     }
   }
 }

@@ -7,7 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import src.DatabaseConnection;
+
+import src.utils.DatabaseConnection;
 
 public class AdminDatabase {
   private static String name;

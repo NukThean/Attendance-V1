@@ -1,11 +1,13 @@
-package src.loginpage;
+package src.Login;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import src.MainApp;
+
 import src.dashboard.img;
-import src.userPage.userPage;
+import src.loginpage.AdminDatabase;
+import src.loginpage.AdminMain;
+import src.loginpage.User;
 
 public class AdminLogin extends JFrame implements ActionListener {
   private JLabel lblEmpId = new JLabel("Administator ID ");
@@ -16,13 +18,11 @@ public class AdminLogin extends JFrame implements ActionListener {
   private JPasswordField txtPw = new JPasswordField();
   private JCheckBox showpw = new JCheckBox("Show Password?");
   private JButton btnLogin = new JButton("Login");
-  private MainApp mainApp;
-  private userPage userPanel;
+  private AdminMain mainApp;
   int error = 0;
 
-  public AdminLogin(MainApp mainApp) {
-    this.mainApp = mainApp;
-    // this.userPanel = new userPage();
+  public AdminLogin() {
+    mainApp = new AdminMain();
     setLayout(new BorderLayout());
     img graphic = new img();
 
@@ -279,11 +279,6 @@ public class AdminLogin extends JFrame implements ActionListener {
     mainApp.setVisible(true);
   }
 
-  public void showUserPage() {
-    this.setVisible(false);
-    userPanel.setVisible(true);
-  }
-
   @Override
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == btnLogin) {
@@ -302,12 +297,6 @@ public class AdminLogin extends JFrame implements ActionListener {
 
       if (user != null) {
         System.out.println("Admin authenticated. Role: " + user.getRole());
-        // Uncomment and adjust these lines if needed based on your roles
-        // if (user.getRole() == Role.ADMIN) {
-        // showMainApp();
-        // } else if (user.getRole() == Role.USER) {
-        // showUserPage();
-        // }
         showMainApp();
       } else {
         if (error < 2) {
@@ -322,14 +311,7 @@ public class AdminLogin extends JFrame implements ActionListener {
     }
   }
 
-
   public static void main(String[] args) {
-    SwingUtilities.invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        MainApp mainApp = new MainApp(); // Ensure MainApp is properly implemented and imported
-        new AdminLogin(mainApp).setVisible(true);
-      }
-    });
+    new AdminLogin();
   }
 }

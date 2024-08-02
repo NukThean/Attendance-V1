@@ -22,8 +22,8 @@ public class EmpSearch extends JFrame implements ActionListener {
   private static EmpSearch empsearch;
   private static TableUtils tableutil = new TableUtils(); // Create an instance of EmpTable
 
-  private static String[] column = { "ID", "FIRST NAME", "LAST NAME", "PHONE", "EMAIL", "NID", "POSITION",
-      "DEPARTMENT" };
+  private static String[] column =
+      {"ID", "FIRST NAME", "LAST NAME", "PHONE", "EMAIL", "NID", "POSITION", "DEPARTMENT"};
 
   public EmpSearch() {
     empsearch = this;
@@ -65,8 +65,9 @@ public class EmpSearch extends JFrame implements ActionListener {
 
       // Prepare the SQL INSERT statement
       // Prepare the SQL SELECT statement with LIKE clause
-      String sql = "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
-          + "FROM Employees " + "WHERE FIRST_NAME LIKE ? OR LAST_NAME LIKE ?";
+      String sql =
+          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
+              + "FROM Employees " + "WHERE FIRST_NAME LIKE ? OR LAST_NAME LIKE ?";
 
       pstmt = conn.prepareStatement(sql);
       String searchPattern = "%" + name + "%"; // Pattern for partial match
@@ -128,8 +129,9 @@ public class EmpSearch extends JFrame implements ActionListener {
       System.out.println("SearchByID: Connected to the database");
 
       // Prepare the SQL INSERT statement
-      String sql = "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
-          + "FROM Employees WHERE EMPLOYEE_ID = ?";
+      String sql =
+          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
+              + "FROM Employees WHERE EMPLOYEE_ID = ?";
       pstmt = conn.prepareStatement(sql);
       pstmt.setInt(1, id); // Set the ID parameter
       rs = pstmt.executeQuery();

@@ -69,6 +69,15 @@ CREATE TABLE Attendance (
 );
 GO
 
+CREATE TABLE ShiftSchedule (
+    employee_id INT PRIMARY KEY,
+    start_shift TIME,
+    end_shift TIME,
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
+);
+
+
+
 -- Insert an employee for the admin role
 INSERT INTO Employees (first_name, last_name, sex, department, position, email, phone, nid)
 VALUES ('CHEA', 'NUKTHEAN','M', 'CEO', 'CEO', 'admin@example.com1', '1234567890', '123456789');

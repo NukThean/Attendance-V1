@@ -17,6 +17,7 @@ public class EmpInput extends JFrame implements ActionListener {
   JButton btconfirmamend = new JButton("Confirm");
   JLabel lblname1 = new JLabel("First Name: ");
   JLabel lblname2 = new JLabel("Last Name: ");
+  JLabel lblsex = new JLabel("Sex");
   JLabel lblphone = new JLabel("Phone: ");
   JLabel lblemail = new JLabel("Email: ");
   JLabel lblnid = new JLabel("NID: ");
@@ -24,11 +25,13 @@ public class EmpInput extends JFrame implements ActionListener {
   JLabel lbldep = new JLabel("Department: ");
   JLabel lblid = new JLabel("ID: ");
 
+
   JButton btnmore = new JButton("Add more");
   JButton btnfinish = new JButton("Finish");
 
   JTextField txtname1 = new JTextField();
   JTextField txtname2 = new JTextField();
+  JTextField txtsex = new JTextField();
   JTextField txtphone = new JTextField();
   JTextField txtemail = new JTextField();
   JTextField txtnid = new JTextField();
@@ -66,6 +69,7 @@ public class EmpInput extends JFrame implements ActionListener {
 
     lblname1.setFont(customFont);
     lblname2.setFont(customFont);
+    lblsex.setFont(customFont);
     lblphone.setFont(customFont);
     lblemail.setFont(customFont);
     lblnid.setFont(customFont);
@@ -75,6 +79,7 @@ public class EmpInput extends JFrame implements ActionListener {
 
     txtname1.setFont(customFont);
     txtname2.setFont(customFont);
+    txtsex.setFont(customFont);
     txtphone.setFont(customFont);
     txtemail.setFont(customFont);
     txtnid.setFont(customFont);
@@ -94,24 +99,26 @@ public class EmpInput extends JFrame implements ActionListener {
     addlabeltopanel(ccenter, lblname1, err, 0, 0);
     err.insets = new Insets(10, 15, 5, 310);
     addlabeltopanel(ccenter, lblname2, err, 1, 0);
-    addlabeltopanel(ccenter, lblphone, err, 2, 0);
-    addlabeltopanel(ccenter, lblemail, err, 3, 0);
-    addlabeltopanel(ccenter, lblnid, err, 4, 0);
+    addlabeltopanel(ccenter, lblsex, err, 2, 0);
+    addlabeltopanel(ccenter, lblphone, err, 3, 0);
+    addlabeltopanel(ccenter, lblemail, err, 4, 0);
     err.insets = new Insets(5, 0, 0, 310);
-    addlabeltopanel(ccenter, lbldep, err, 0, 1);
-    addlabeltopanel(ccenter, lblposition, err, 1, 1);
-    addlabeltopanel(ccenter, lblid, err, 2, 1); // Add lblid to the panel
+    addlabeltopanel(ccenter, lblnid, err, 0, 1);
+    addlabeltopanel(ccenter, lbldep, err, 1, 1);
+    addlabeltopanel(ccenter, lblposition, err, 2, 1);
+    addlabeltopanel(ccenter, lblid, err, 3, 1); // Add lblid to the panel
 
     nghz.insets = new Insets(10, 120, 5, 0);
     addtxtfieldtopanel(ccenter, txtname1, nghz, 0, 0);
     addtxtfieldtopanel(ccenter, txtname2, nghz, 1, 0);
-    addtxtfieldtopanel(ccenter, txtphone, nghz, 2, 0);
-    addtxtfieldtopanel(ccenter, txtemail, nghz, 3, 0);
-    addtxtfieldtopanel(ccenter, txtnid, nghz, 4, 0);
+    addtxtfieldtopanel(ccenter, txtsex, nghz, 2, 0);
+    addtxtfieldtopanel(ccenter, txtphone, nghz, 3, 0);
+    addtxtfieldtopanel(ccenter, txtemail, nghz, 4, 0);
     nghz.insets = new Insets(10, 110, 5, 0);
-    addcomboboxtopanel(ccenter, cmbdep, nghz, 0, 1);
-    addtxtfieldtopanel(ccenter, txtposition, nghz, 1, 1);
-    addtxtfieldtopanel(ccenter, txtid, nghz, 2, 1); // Add txtid to the panel
+    addtxtfieldtopanel(ccenter, txtnid, nghz, 0, 1);
+    addcomboboxtopanel(ccenter, cmbdep, nghz, 1, 1);
+    addtxtfieldtopanel(ccenter, txtposition, nghz, 2, 1);
+    addtxtfieldtopanel(ccenter, txtid, nghz, 3, 1); // Add txtid to the panel
 
     addButtonToPanel(south, btnmore);
     addButtonToPanel(south, btnfinish);
@@ -135,6 +142,13 @@ public class EmpInput extends JFrame implements ActionListener {
     });
 
     txtname2.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        txtsex.requestFocus();
+      }
+    });
+
+    txtsex.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         txtphone.requestFocus();
@@ -229,6 +243,7 @@ public class EmpInput extends JFrame implements ActionListener {
   private void clearTextFields() {
     txtname1.setText("");
     txtname2.setText("");
+    txtsex.setText("");
     txtphone.setText("");
     txtemail.setText("");
     txtnid.setText("");
@@ -249,8 +264,9 @@ public class EmpInput extends JFrame implements ActionListener {
       System.out.println("Info_input_insert: Connected to the database");
 
       // Prepare the SQL INSERT statement for Employees
-      String sql = "INSERT INTO Employees (FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT) "
-          + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+      String sql =
+          "INSERT INTO Employees (FIRST_NAME, LAST_NAME, SEX, PHONE, EMAIL, NID, POSITION, DEPARTMENT) "
+              + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
       // Create the PreparedStatement
       pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -259,11 +275,12 @@ public class EmpInput extends JFrame implements ActionListener {
       for (emp_info staff : staffList) {
         pstmt.setString(1, staff.getFirstName());
         pstmt.setString(2, staff.getLastName());
-        pstmt.setInt(3, staff.getPhone());
-        pstmt.setString(4, staff.getEmail());
-        pstmt.setInt(5, staff.getNid());
-        pstmt.setString(6, staff.getPosition());
-        pstmt.setString(7, staff.getDepartment());
+        pstmt.setString(3, staff.getSex());
+        pstmt.setInt(4, staff.getPhone());
+        pstmt.setString(5, staff.getEmail());
+        pstmt.setInt(6, staff.getNid());
+        pstmt.setString(7, staff.getPosition());
+        pstmt.setString(8, staff.getDepartment());
 
         // Execute the insert statement
         pstmt.executeUpdate();
@@ -274,7 +291,7 @@ public class EmpInput extends JFrame implements ActionListener {
           int employeeId = rs.getInt(1); // Retrieve the ID
 
           // Insert corresponding user role into the User table
-          String userSql = "INSERT INTO [User] (role, last_login, user_id) " + "VALUES (?, GETDATE(), ?)";
+          String userSql = "INSERT INTO [User] (role, user_id) " + "VALUES (?, ?)";
           try (PreparedStatement userPstmt = conn.prepareStatement(userSql)) {
             // userPstmt.setString(1, "1"); // Set the password
             userPstmt.setString(1, "user"); // Set the role
@@ -313,6 +330,7 @@ public class EmpInput extends JFrame implements ActionListener {
       // Gather data from text fields
       String firstName = txtname1.getText();
       String lastName = txtname2.getText();
+      String sex = txtsex.getText();
       String phone = txtphone.getText();
       String email = txtemail.getText();
       String nid = txtnid.getText();
@@ -320,7 +338,7 @@ public class EmpInput extends JFrame implements ActionListener {
       String department = (String) cmbdep.getSelectedItem();
 
       // Create an emp_info object
-      emp_info staff = new emp_info(0, firstName, lastName, Integer.parseInt(phone), email,
+      emp_info staff = new emp_info(0, firstName, lastName, sex, Integer.parseInt(phone), email,
           Integer.parseInt(nid), position, department);
 
       // Insert the data into the database
@@ -334,6 +352,7 @@ public class EmpInput extends JFrame implements ActionListener {
       // Gather data from text fields
       String firstName = txtname1.getText();
       String lastName = txtname2.getText();
+      String sex = txtsex.getText();
       String phone = txtphone.getText();
       String email = txtemail.getText();
       String nid = txtnid.getText();
@@ -341,7 +360,7 @@ public class EmpInput extends JFrame implements ActionListener {
       String department = (String) cmbdep.getSelectedItem();
 
       // Create an emp_info object
-      emp_info staff = new emp_info(0, firstName, lastName, Integer.parseInt(phone), email,
+      emp_info staff = new emp_info(0, firstName, lastName, sex, Integer.parseInt(phone), email,
           Integer.parseInt(nid), position, department);
 
       // Insert the data into the database

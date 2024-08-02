@@ -9,14 +9,16 @@ public class emp_info {
   private int nid;
   private String position;
   private String department;
+  private String sex;
 
   // data for use with arraylist in empform and Info_input
 
-  public emp_info(int id, String firstName, String lastName, int phone, String email, int nid,
-      String position, String department) {
+  public emp_info(int id, String firstName, String lastName, String sex, int phone, String email,
+      int nid, String position, String department) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.sex = sex;
     this.phone = phone;
     this.email = email;
     this.nid = nid;
@@ -54,6 +56,10 @@ public class emp_info {
 
   public String getDepartment() {
     return department;
+  }
+
+  public String getSex() {
+    return sex;
   }
 }
 

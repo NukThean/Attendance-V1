@@ -17,7 +17,7 @@ public class attform extends JPanel {
   private DefaultTableModel tableModel;
   private JScrollPane scrollpane;
 
-  String[] column = { "att_id", "emp_id", "date", "check_in_time", "check_out_time" };
+  String[] column = {"att_id", "emp_id", "date", "check_in_time", "check_out_time"};
 
   public attform() {
     setLayout(new BorderLayout());
@@ -36,7 +36,14 @@ public class attform extends JPanel {
     setVisible(true);
 
     getAttnew();
+    autoRefresh();
 
+  }
+
+  protected void autoRefresh() {
+    // Set up the auto-refresh timer
+    Timer refreshTimer = new Timer(5000, e -> getAttnew());
+    refreshTimer.start();
   }
 
   public void getAttnew() {
@@ -52,7 +59,8 @@ public class attform extends JPanel {
       System.out.println("attform: load populateTable ");
 
       // Prepare the SQL SELECT statement
-      String sql = "SELECT ATTENDANCE_ID, EMPLOYEE_ID, DATE, CHECK_IN_TIME, CHECK_OUT_TIME FROM Attendance ORDER BY attendance_id DESC";
+      String sql =
+          "SELECT ATTENDANCE_ID, EMPLOYEE_ID, DATE, CHECK_IN_TIME, CHECK_OUT_TIME FROM Attendance ORDER BY attendance_id DESC";
 
       // Create the PreparedStatement
       pstmt = conn.prepareStatement(sql);

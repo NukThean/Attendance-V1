@@ -26,7 +26,7 @@ public class EmpAmend extends EmpInput {
     EmpAmend amendFrame = new EmpAmend();
     amendFrame.setVisible(true);
 
-    getStaffInfo(id, amendFrame.txtid, amendFrame.txtname1, amendFrame.txtname2,
+    getStaffInfo(id, amendFrame.txtid, amendFrame.txtname1, amendFrame.txtname2, amendFrame.txtsex,
         amendFrame.txtphone, amendFrame.txtemail, amendFrame.txtnid, amendFrame.txtposition,
         amendFrame.cmbdep);
   }
@@ -56,8 +56,8 @@ public class EmpAmend extends EmpInput {
   }
 
   public static void getStaffInfo(int id, JTextField txtid, JTextField txtname1,
-      JTextField txtname2, JTextField txtphone, JTextField txtemail, JTextField txtnid,
-      JTextField txtposition, JComboBox<String> cmbdep) {
+      JTextField txtname2, JTextField txtsex, JTextField txtphone, JTextField txtemail,
+      JTextField txtnid, JTextField txtposition, JComboBox<String> cmbdep) {
 
     Connection conn = null;
     PreparedStatement pstmt = null;
@@ -66,7 +66,8 @@ public class EmpAmend extends EmpInput {
       conn = DatabaseConnection.getConnection();
       System.out.println("Info_input_getStaffInfo: Connected to the database");
 
-      String sql = "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT FROM Employees WHERE EMPLOYEE_ID = ?";
+      String sql =
+          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SEX, PHONE, EMAIL, NID, POSITION, DEPARTMENT FROM Employees WHERE EMPLOYEE_ID = ?";
 
       pstmt = conn.prepareStatement(sql);
       pstmt.setInt(1, id);
@@ -76,6 +77,7 @@ public class EmpAmend extends EmpInput {
         int fetchid = rs.getInt("EMPLOYEE_ID");
         String firstName = rs.getString("FIRST_NAME");
         String lastName = rs.getString("LAST_NAME");
+        String sex = rs.getString("SEX");
         String phone = rs.getString("PHONE");
         String email = rs.getString("EMAIL");
         String nid = rs.getString("NID");
@@ -85,6 +87,7 @@ public class EmpAmend extends EmpInput {
         txtid.setText(String.valueOf(fetchid));
         txtname1.setText(firstName);
         txtname2.setText(lastName);
+        txtsex.setText(sex);
         txtphone.setText(phone);
         txtemail.setText(email);
         txtnid.setText(nid);
@@ -119,18 +122,20 @@ public class EmpAmend extends EmpInput {
       conn = DatabaseConnection.getConnection();
       System.out.println("Info_input_update: Connected to the database");
 
-      String sql = "UPDATE Employees SET FIRST_NAME = ?, LAST_NAME = ?, PHONE = ?, EMAIL = ?, NID = ?, POSITION = ?, DEPARTMENT = ? WHERE EMPLOYEE_ID = ?";
+      String sql =
+          "UPDATE Employees SET FIRST_NAME = ?, LAST_NAME = ?, SEX = ?, PHONE = ?, EMAIL = ?, NID = ?, POSITION = ?, DEPARTMENT = ? WHERE EMPLOYEE_ID = ?";
 
       pstmt = conn.prepareStatement(sql);
 
       pstmt.setString(1, staff.getFirstName());
       pstmt.setString(2, staff.getLastName());
-      pstmt.setInt(3, staff.getPhone());
-      pstmt.setString(4, staff.getEmail());
-      pstmt.setInt(5, staff.getNid());
-      pstmt.setString(6, staff.getPosition());
-      pstmt.setString(7, staff.getDepartment());
-      pstmt.setInt(8, staff.getId());
+      pstmt.setString(3, staff.getSex());
+      pstmt.setInt(4, staff.getPhone());
+      pstmt.setString(5, staff.getEmail());
+      pstmt.setInt(6, staff.getNid());
+      pstmt.setString(7, staff.getPosition());
+      pstmt.setString(8, staff.getDepartment());
+      pstmt.setInt(9, staff.getId());
 
       pstmt.executeUpdate();
       System.out.println("Staff information updated successfully!");
@@ -156,13 +161,14 @@ public class EmpAmend extends EmpInput {
     int id = Integer.parseInt(txtid.getText());
     String firstName = txtname1.getText();
     String lastName = txtname2.getText();
+    String sex = txtsex.getText();
     String phone = txtphone.getText();
     String email = txtemail.getText();
     String nid = txtnid.getText();
     String position = txtposition.getText();
     String department = (String) cmbdep.getSelectedItem();
 
-    emp_info staff = new emp_info(id, firstName, lastName, Integer.parseInt(phone), email,
+    emp_info staff = new emp_info(id, firstName, lastName, sex, Integer.parseInt(phone), email,
         Integer.parseInt(nid), position, department);
 
     if (e.getSource() == btnmore) {

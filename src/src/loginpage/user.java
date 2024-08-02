@@ -2,10 +2,11 @@ package src.loginpage;
 
 public class User {
   private int userId;
+  private String sex;
   private String password;
   private Role role;
   private String name; // Add this field
-  private static String[] department = { "HR", "Finance", "IT", "Marketing" };
+  private static String[] department = {"HR", "Finance", "IT", "Marketing"};
 
   // Constructor
   public User(int userId, String password, Role role, String name) {
@@ -43,5 +44,6 @@ public class User {
   public static String[] getDepartment() {
     return department;
   }
+
 
 }

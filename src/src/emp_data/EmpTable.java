@@ -27,7 +27,8 @@ public class EmpTable extends JPanel implements ActionListener {
   private DefaultTableModel tableModel;
   private JScrollPane scrollpane;
 
-  String[] column = { "ID", "FIRST NAME", "LAST NAME", "PHONE", "EMAIL", "POSITION", "DEPARTMENT" };
+  String[] column =
+      {"ID", "FIRST NAME", "LAST NAME", "SEX", "PHONE", "EMAIL", "POSITION", "DEPARTMENT"};
 
   public EmpTable() {
     setLayout(new BorderLayout()); // Use BorderLayout for main panel
@@ -89,7 +90,8 @@ public class EmpTable extends JPanel implements ActionListener {
 
     // Adjust column widths after populating the table
     TableUtils.adjustColumnWidth(table, 0, 30);
-    TableUtils.adjustColumnWidth(table, 3, 65);
+    TableUtils.adjustColumnWidth(table, 3, 30);
+    TableUtils.adjustColumnWidth(table, 4, 70);
 
   }
 
@@ -111,7 +113,8 @@ public class EmpTable extends JPanel implements ActionListener {
       conn = DatabaseConnection.getConnection();
 
       // Prepare the SQL SELECT statement
-      String sql = "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, POSITION, DEPARTMENT FROM Employees";
+      String sql =
+          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SEX, PHONE, EMAIL, POSITION, DEPARTMENT FROM Employees ORDER BY Department";
 
       // Create the PreparedStatement
       pstmt = conn.prepareStatement(sql);
@@ -125,6 +128,7 @@ public class EmpTable extends JPanel implements ActionListener {
         row.add(rs.getInt("EMPLOYEE_ID"));
         row.add(rs.getString("FIRST_NAME"));
         row.add(rs.getString("LAST_NAME"));
+        row.add(rs.getString("SEX"));
         row.add(rs.getString("PHONE"));
         row.add(rs.getString("EMAIL"));
         row.add(rs.getString("POSITION"));
@@ -167,6 +171,8 @@ public class EmpTable extends JPanel implements ActionListener {
       EmpSearch searchFrame = new EmpSearch();
       searchFrame.showSearchOption();
     } else if (e.getSource() == btnsort) {
+      EmpSort empsort = new EmpSort();
+      empsort.showSortDialog();
 
     }
   }

@@ -2,7 +2,6 @@ package src.loginpage;
 
 public class User {
   private int userId;
-  private String sex;
   private String password;
   private Role role;
   private String name; // Add this field

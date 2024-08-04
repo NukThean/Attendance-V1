@@ -56,7 +56,7 @@ public class attform extends JPanel {
     try {
       // Establish the connection
       conn = DatabaseConnection.getConnection();
-      System.out.println("attform: load populateTable ");
+      // System.out.println("attform: load populateTable ");
 
       // Prepare the SQL SELECT statement
       String sql =

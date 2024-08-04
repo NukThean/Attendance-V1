@@ -9,6 +9,13 @@
       "name": "AdminLogin",
       "request": "launch",
       "mainClass": "src.Login.AdminLogin",
+      "projectName": "Attendance-V1_b87bb206"
+    },
+    {
+      "type": "java",
+      "name": "AdminLogin",
+      "request": "launch",
+      "mainClass": "src.Login.AdminLogin",
       "projectName": "Attendance V1_b87b8139"
     },
     {

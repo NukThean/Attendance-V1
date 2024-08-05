@@ -6,6 +6,34 @@
   "configurations": [
     {
       "type": "java",
+      "name": "AdminMain",
+      "request": "launch",
+      "mainClass": "src.loginpage.AdminMain",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "RotatedLabel",
+      "request": "launch",
+      "mainClass": "src.loginpage.RotatedLabel",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "RotatedLabel",
+      "request": "launch",
+      "mainClass": "src.RotatedLabel",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "test",
+      "request": "launch",
+      "mainClass": "src.test",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
       "name": "AdminLogin",
       "request": "launch",
       "mainClass": "src.Login.AdminLogin",

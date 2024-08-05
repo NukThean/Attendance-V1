@@ -26,6 +26,7 @@ GO
 CREATE TABLE Admin (
     admin_id INT PRIMARY KEY,
     password VARCHAR(64) NULL, -- Store hashed passwords
+	salt VARCHAR(32) NULL, --Store salt value
     last_login DATETIME DEFAULT CURRENT_TIMESTAMP,
     failed_attempts INT DEFAULT 0,
     account_status VARCHAR(20) DEFAULT 'active',
@@ -38,6 +39,7 @@ GO
 CREATE TABLE [User] (
     user_id INT PRIMARY KEY,
     password VARCHAR(64) NULL, -- Store hashed passwords
+	salt VARCHAR(32) NULL, --Store salt value
     last_login DATETIME DEFAULT CURRENT_TIMESTAMP,
     failed_attempts INT DEFAULT 0,
     account_status VARCHAR(20) DEFAULT 'active',
@@ -92,20 +94,6 @@ DECLARE @admin_user_id INT = SCOPE_IDENTITY();
 -- Insert the corresponding admin role into the Admin table
 INSERT INTO Admin (admin_id, password, role)
 VALUES (@admin_user_id, CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', '1'), 2), 'admin');
-INSERT INTO [User] (user_id, password, role)
-VALUES (@admin_user_id, CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', '1'), 2), 'user');
+INSERT INTO [USER] (user_id, role)
+VALUES (@admin_user_id, 'user');
 
--- Insert an employee for the user role
-INSERT INTO Employees (first_name, last_name,sex, department, position, email, phone, nid)
-VALUES ('BERN', 'ERN','M', 'Development', 'Developer', 'user@example.com1', '0987654321', '987654321');
-
--- Get the employee_id of the newly inserted user employee
-DECLARE @user_employee_id INT = SCOPE_IDENTITY();
-
-
--- Get the user_id of the newly inserted user role
-DECLARE @user_user_id INT = SCOPE_IDENTITY();
-
--- Insert the corresponding user role into the User table
-INSERT INTO [User] (user_id, password, role)
-VALUES (@user_user_id, CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', '1'), 2), 'user');

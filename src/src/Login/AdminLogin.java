@@ -3,35 +3,45 @@ package src.Login;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-import src.dashboard.img;
+import src.loginpage.Admin;
 import src.loginpage.AdminDatabase;
 import src.loginpage.AdminMain;
 import src.loginpage.User;
 
 public class AdminLogin extends JFrame implements ActionListener {
+
   private JLabel lblEmpId = new JLabel("Administator ID ");
   private JLabel lbltxt = new JLabel("Login");
   private JLabel lbltxt2 = new JLabel("<html><u>Forgot password?</u></html>");
   private JLabel lblPw = new JLabel("Password ");
+  private JLabel lblLogin = new JLabel("<html>" + "<div style='text-align:center;'>"
+      + "<span style='font-size:18px;'>Company Name</span>");
   private JTextField txtUserId = new JTextField();
   private JPasswordField txtPw = new JPasswordField();
   private JCheckBox showpw = new JCheckBox("Show Password?");
-  private JButton btnLogin = new JButton("Login");
+  private JButton btnNext = new JButton("Login1");
+  private JButton btnLogin = new JButton("Login2");
   private AdminMain mainApp;
+  JPanel pwPanel;
   int error = 0;
+
+  private enum LoginState {
+    CHECK_USERID, ENABLE_PASSWORD, VERIFY_PASSWORD, ADD_PASSWORD
+  }
+
+  LoginState State = LoginState.CHECK_USERID;
 
   public AdminLogin() {
     mainApp = new AdminMain();
     setLayout(new BorderLayout());
-    img graphic = new img();
+
 
     JPanel pagecenter = new JPanel(new BorderLayout());
     pagecenter.setPreferredSize(new Dimension(280, 300));
     pagecenter.setBackground(Color.WHITE);
-    JPanel pagewest = new JPanel(new BorderLayout());
-    pagewest.setPreferredSize(new Dimension(120, 0));
-    pagewest.setBackground(Color.WHITE);
+    JPanel pagewest = new JPanel(new GridBagLayout());
+    pagewest.setPreferredSize(new Dimension(120, 300));
+    pagewest.setBackground(Color.BLUE.darker());
 
     lbltxt.setFont(new Font("Times New Roman", Font.PLAIN, 24));
     lbltxt.setForeground(Color.WHITE);
@@ -46,6 +56,10 @@ public class AdminLogin extends JFrame implements ActionListener {
     showpw.setBackground(Color.WHITE);
     showpw.setFocusPainted(false);
     lbltxt2.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+
+
+    lblLogin.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+    lblLogin.setForeground(Color.WHITE);
 
     JPanel center = new JPanel(new GridBagLayout());
     center.setPreferredSize(new Dimension(400, 200));
@@ -63,7 +77,7 @@ public class AdminLogin extends JFrame implements ActionListener {
     empIdPanel.setPreferredSize(new Dimension(400, 100));
     empIdPanel.setBackground(Color.WHITE);
 
-    JPanel pwPanel = new JPanel(new GridBagLayout());
+    pwPanel = new JPanel(new GridBagLayout());
     pwPanel.setPreferredSize(new Dimension(400, 100));
     pwPanel.setBackground(Color.WHITE);
 
@@ -87,6 +101,7 @@ public class AdminLogin extends JFrame implements ActionListener {
     gbc.weightx = 1;
     gbc.weighty = 1;
 
+    addButtonToPanel(south, btnNext, 0);
     addButtonToPanel(south, btnLogin, 0);
 
     lt.insets = new Insets(5, 10, 5, 10);
@@ -121,15 +136,21 @@ public class AdminLogin extends JFrame implements ActionListener {
     lt.gridwidth = 1;
     lt.gridx = 0;
     lt.gridy = 0;
-    btnLogin.setPreferredSize(new Dimension(50, 30));
-    btnLogin.setMinimumSize(new Dimension(50, 30));
+    btnLogin.setPreferredSize(new Dimension(60, 30));
+    btnLogin.setMinimumSize(new Dimension(60, 30));
     btnLogin.setMargin(new Insets(0, 5, 0, 5));
     south.add(btnLogin, lt);
+
+    btnNext.setPreferredSize(new Dimension(60, 30));
+    btnNext.setMinimumSize(new Dimension(60, 30));
+    btnNext.setMargin(new Insets(0, 5, 0, 5));
+    south.add(btnNext, lt);
 
     lt.fill = GridBagConstraints.CENTER;
     north.add(lbltxt, lt);
 
     btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    btnNext.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     showpw.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     lbltxt2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     lbltxt2.setForeground(Color.BLUE.darker());
@@ -161,44 +182,35 @@ public class AdminLogin extends JFrame implements ActionListener {
       }
     });
 
-    btnLogin.addMouseMotionListener(new MouseMotionListener() {
+    btnLogin.addActionListener(new ActionListener() {
       @Override
-      public void mouseDragged(MouseEvent e) {
-        // Not needed for this functionality
-      }
-
-      private boolean moveRight = true;
-
-      @Override
-      public void mouseMoved(MouseEvent e) {
-        String empIdText = txtUserId.getText();
-        String password = new String(txtPw.getPassword());
-        if (empIdText.isEmpty() || password.isEmpty()) {
-          int currentX = btnLogin.getX();
-          int newX;
-
-          if (moveRight) {
-            newX = currentX + 100; // Move 100 pixels to the right
-            if (newX + btnLogin.getWidth() > getWidth()) {
-              newX = getWidth() - btnLogin.getWidth(); // Adjust if it exceeds the right boundary
-            }
-          } else {
-            newX = currentX - 100; // Move 100 pixels to the left
-            if (newX < 0) {
-              newX = 0; // Adjust if it exceeds the left boundary
-            }
-          }
-
-          btnLogin.setLocation(newX, btnLogin.getY());
-          moveRight = !moveRight; // Toggle the direction for the next move
-        }
+      public void actionPerformed(ActionEvent e) {
+        State = LoginState.VERIFY_PASSWORD;
+        handleLoginPw();
       }
     });
+
+    btnNext.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        // State = LoginState.VERIFY_PASSWORD;
+        handleLogin();
+      }
+    });
+
+    txtPw.setEnabled(false);
+    pwPanel.setVisible(false);
+    showpw.setVisible(false);
+    btnLogin.setVisible(false);
+
+
+    lt.insets = new Insets(10, 0, 180, 0);
+
 
     pagecenter.add(north, BorderLayout.NORTH);
     pagecenter.add(center, BorderLayout.CENTER);
     pagecenter.add(south, BorderLayout.SOUTH);
-    pagewest.add(graphic.getEmoji7(), BorderLayout.CENTER);
+    pagewest.add(lblLogin, lt);
 
     add(pagecenter, BorderLayout.CENTER);
     add(pagewest, BorderLayout.WEST);
@@ -279,39 +291,141 @@ public class AdminLogin extends JFrame implements ActionListener {
     mainApp.setVisible(true);
   }
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    if (e.getSource() == btnLogin) {
-      String userid = txtUserId.getText();
-      int userId;
-      try {
-        userId = Integer.parseInt(userid);
-      } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(this, "Invalid Admin ID. Please enter a valid number.");
-        return;
-      }
-      String password = new String(txtPw.getPassword());
+  public void EnablePW() {
+    System.out.println("EnablePW");
+    State = LoginState.ENABLE_PASSWORD;
+    handleLogin();
+  }
 
-      System.out.println("Attempting login with AdminID: " + userId);
-      User user = AdminDatabase.Adminauthenticate(userId, password);
+  public void VerifyPW() {
+    System.out.println("VerifyPW");
+    State = LoginState.VERIFY_PASSWORD;
+    handleLogin();
+  }
 
-      if (user != null) {
-        System.out.println("Admin authenticated. Role: " + user.getRole());
-        showMainApp();
-      } else {
-        if (error < 2) {
-          error += 1;
-          JOptionPane.showMessageDialog(this, "Wrong account");
+  public void WrongPw() {
+    JOptionPane.showMessageDialog(null, "Wrong password hehe");
+  }
+
+  public void addPw() {
+    State = LoginState.ADD_PASSWORD;
+    handleLoginPw();
+  }
+
+
+
+  private void handleLogin() {
+    int userId;
+
+    try {
+      userId = Integer.parseInt(txtUserId.getText().trim());
+    } catch (NumberFormatException o) {
+      JOptionPane.showMessageDialog(this, "Invalid Employee ID. Please enter a valid number.",
+          "Error", JOptionPane.ERROR_MESSAGE);
+      System.out.println("Invalid id format");
+      return;
+    }
+
+    switch (State) {
+
+      case CHECK_USERID:
+        if (AdminDatabase.CheckAdminIdExist(userId)) {
+
+          System.out.println("CASE CHECK USERID");
+          EnablePW();
+
         } else {
-          txtPw.setEnabled(false);
-          txtUserId.setEnabled(false);
-          JOptionPane.showMessageDialog(this, "Max attempts reached");
+          JOptionPane.showMessageDialog(this, "User ID does not exist. Please try again.", "Error",
+              JOptionPane.ERROR_MESSAGE);
+          System.out.println("UserID not exist");
+          return;
         }
-      }
+        break;
+
+      case ENABLE_PASSWORD:
+        pwPanel.setVisible(true);
+        txtPw.setEnabled(true);
+        txtPw.setVisible(true);
+        showpw.setVisible(true);
+        btnNext.setVisible(false);
+        btnLogin.setVisible(true);
+        System.out.println("CASE ENABLE PASSWORD");
+
+        if (AdminDatabase.CheckAdminIdExist(userId) && AdminDatabase.CheckAdminPwExist(userId)) {
+          System.out.println("ID and PW Exist");
+          System.out.println(AdminDatabase.CheckAdminPwExist(userId));
+        } else {
+          System.out.println("ID Exist PW Not Exist");
+          addPw();
+          if (AdminDatabase.CheckAdminPwExist(userId)) {
+            pwPanel.setVisible(true);
+            showpw.setVisible(true);
+          }
+        }
+
+        break;
+
+      default:
+        JOptionPane.showMessageDialog(this, "Unexpected state. Please try again.", "Error",
+            JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+  }
+
+
+  private void handleLoginPw() {
+    int userId;
+    Admin user;
+    String password;
+
+
+    try {
+      userId = Integer.parseInt(txtUserId.getText().trim());
+    } catch (NumberFormatException o) {
+      JOptionPane.showMessageDialog(this, "Invalid Employee ID. Please enter a valid number.",
+          "Error", JOptionPane.ERROR_MESSAGE);
+      System.out.println("Invalid id format");
+      return;
+    }
+
+    switch (State) {
+
+      case VERIFY_PASSWORD:
+        System.out.println("CASE VERIFY PASSWORD");
+        password = new String(txtPw.getPassword());
+        user = AdminDatabase.AdminAuthenticate(userId, password);
+
+        if (user != null) {
+          System.out
+              .println("User authenticated.\nUserID: " + userId + "\nRole: " + user.getRole());
+          showMainApp();;
+        } else if (!AdminDatabase.CheckAdminPwTrue(userId, password)) {
+          WrongPw();
+        }
+
+        break;
+
+
+      case ADD_PASSWORD:
+
+        String newPassword = AdminDatabase.handleNullPassword(userId);
+        System.out.println(newPassword);
+
+        break;
+
+      default:
+        JOptionPane.showMessageDialog(this, "Unexpected state. Please try again.", "Error",
+            JOptionPane.ERROR_MESSAGE);
+        return;
     }
   }
 
   public static void main(String[] args) {
     new AdminLogin();
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent e) {
+
   }
 }

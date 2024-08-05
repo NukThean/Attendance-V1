@@ -92,8 +92,8 @@ DECLARE @admin_employee_id INT = SCOPE_IDENTITY();
 DECLARE @admin_user_id INT = SCOPE_IDENTITY();
 
 -- Insert the corresponding admin role into the Admin table
-INSERT INTO Admin (admin_id, password, role)
-VALUES (@admin_user_id, CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', '1'), 2), 'admin');
+INSERT INTO Admin (admin_id, role)
+VALUES (@admin_user_id, 'admin');
 INSERT INTO [USER] (user_id, role)
 VALUES (@admin_user_id, 'user');
 

@@ -6,7 +6,6 @@ import javax.swing.*;
 import src.loginpage.Admin;
 import src.loginpage.AdminDatabase;
 import src.loginpage.AdminMain;
-import src.loginpage.User;
 
 public class AdminLogin extends JFrame implements ActionListener {
 

@@ -3,7 +3,6 @@ package src.Login;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import src.loginpage.AdminMain;
 import src.loginpage.User;
 import src.loginpage.UserDatabase;
 import src.userPage.userPage;
@@ -16,26 +15,23 @@ public class UserLogin extends JFrame implements ActionListener {
   private JLabel lblLogin = new JLabel("<html>" + "<div style='text-align:center;'>"
       + "<span style='font-size:18px;'>Company Name</span>");
 
-
   private JTextField txtUserId = new JTextField();
   private JPasswordField txtPw = new JPasswordField();
   private JCheckBox showpw = new JCheckBox("Show Password?");
   private JButton btnNext = new JButton("Login1");
   private JButton btnLogin = new JButton("Login2");
   private JPanel pwPanel = new JPanel();
-  private AdminMain mainApp;
   private userPage userPanel;
-  int error = 0;
+  int error;
 
   private enum LoginState {
-    CHECK_USERID, ENABLE_PASSWORD, VERIFY_PASSWORD, ADD_PASSWORD
+    CHECK_USERID, ENABLE_PASSWORD, VERIFY_PASSWORD, ADD_PASSWORD, USER_BLOCKED
   }
 
   LoginState State = LoginState.CHECK_USERID;
 
   public UserLogin() {
     setLayout(new BorderLayout());
-
 
     JPanel pagecenter = new JPanel(new BorderLayout());
     pagecenter.setPreferredSize(new Dimension(280, 300));
@@ -181,7 +177,6 @@ public class UserLogin extends JFrame implements ActionListener {
     btnNext.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        // State = LoginState.VERIFY_PASSWORD;
         handleLogin();
       }
     });
@@ -273,11 +268,6 @@ public class UserLogin extends JFrame implements ActionListener {
     frame.setVisible(true);
   }
 
-  public void showMainApp() {
-    this.setVisible(false);
-    mainApp.setVisible(true);
-  }
-
   public void showUserPage(User user) {
     this.userPanel = new userPage(user);
     this.setVisible(false);
@@ -305,7 +295,12 @@ public class UserLogin extends JFrame implements ActionListener {
     handleLoginPw();
   }
 
-
+  public void userBlock() {
+    State = LoginState.ENABLE_PASSWORD;
+    handleLogin();
+    State = LoginState.USER_BLOCKED;
+    handleLoginPw();
+  }
 
   private void handleLogin() {
     int userId;
@@ -323,9 +318,17 @@ public class UserLogin extends JFrame implements ActionListener {
 
       case CHECK_USERID:
         if (UserDatabase.CheckuserIdExist(userId)) {
+          error = UserDatabase.get_failed_attempts(userId);
+          if (error > 2) {
+            userBlock();
+            JOptionPane.showMessageDialog(this,
+                "User " + userId + " is blocked from login. please contact the system administator",
+                "Error", JOptionPane.ERROR_MESSAGE);
+          } else {
 
-          System.out.println("CASE CHECK USERID");
-          EnablePW();
+            System.out.println("CASE CHECK USERID");
+            EnablePW();
+          }
 
         } else {
           JOptionPane.showMessageDialog(this, "User ID does not exist. Please try again.", "Error",
@@ -347,6 +350,8 @@ public class UserLogin extends JFrame implements ActionListener {
         if (UserDatabase.CheckuserIdExist(userId) && UserDatabase.CheckuserpwExist(userId)) {
           System.out.println("ID and PW Exist");
           System.out.println(UserDatabase.CheckuserpwExist(userId));
+
+
         } else {
           System.out.println("ID Exist PW Not Exist");
           addPw();
@@ -388,14 +393,29 @@ public class UserLogin extends JFrame implements ActionListener {
         password = new String(txtPw.getPassword());
         user = UserDatabase.authenticate(userId, password);
 
+        error = UserDatabase.get_failed_attempts(userId);
+
         if (user != null) {
           System.out
               .println("User authenticated.\nUserID: " + userId + "\nRole: " + user.getRole());
           showUserPage(user);
+          UserDatabase.reset_fail_attempts(userId);
         } else if (!UserDatabase.CheckuserpwTrue(userId, password)) {
           WrongPw();
+          error = error + 1;
+          System.out.println("UserID " + userId + " Attempt to log in with wrong password");
+          UserDatabase.fail_login(userId);
+          if (error >= 3) {
+            txtPw.setEnabled(false);
+            txtUserId.setEnabled(false);
+            btnLogin.setEnabled(false);
+            System.out.println("USERID " + userId + " BLOCKED FROM LOGIN");
+            JOptionPane.showMessageDialog(this,
+                "User " + userId + " is blocked from login, please contact the system administator",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            UserDatabase.set_status(userId);
+          }
         }
-
         break;
 
 
@@ -410,6 +430,12 @@ public class UserLogin extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(this, "Unexpected state. Please try again.", "Error",
             JOptionPane.ERROR_MESSAGE);
         return;
+
+      case USER_BLOCKED:
+        txtPw.setEnabled(false);
+        txtUserId.setEnabled(false);
+        btnLogin.setEnabled(false);
+        System.out.println("USERID " + userId + " BLOCKED FROM LOGIN");
     }
   }
 

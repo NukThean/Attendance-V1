@@ -183,6 +183,109 @@ public class UserDatabase {
     return hashedNewPassword;
   }
 
+  public static void fail_login(int userId) {
+    int fail_attm = 0;
+    String selectSql = "SELECT failed_attempts FROM [User] WHERE user_id = ?";
+    String updateSql = "UPDATE [User] SET failed_attempts = ? WHERE user_id = ?";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement selectStmt = conn.prepareStatement(selectSql);
+        PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+
+      // Retrieve the current failed_attempts value
+      selectStmt.setInt(1, userId);
+      ResultSet rs = selectStmt.executeQuery();
+
+      if (rs.next()) {
+        fail_attm = rs.getInt("failed_attempts");
+      }
+
+      // Increment the failed_attempts value
+      fail_attm += 1;
+
+      // Update the failed_attempts value in the database
+      updateStmt.setInt(1, fail_attm);
+      updateStmt.setInt(2, userId);
+      updateStmt.executeUpdate();
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void reset_fail_attempts(int userId) {
+    String resetSql = "UPDATE [User] SET failed_attempts = 0 WHERE user_id = ?";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement resetStmt = conn.prepareStatement(resetSql)) {
+
+      // Reset the failed_attempts value in the database
+      resetStmt.setInt(1, userId);
+      resetStmt.executeUpdate();
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void unblock_login(int userId) {
+    String resetSql = "UPDATE [User] SET failed_attempts = 0 WHERE user_id = ?";
+    String resetStat = "UPDATE [User] SET account_satus = ? WHERE user_id = ?";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement resetStmt = conn.prepareStatement(resetSql);
+        PreparedStatement resetStmtt = conn.prepareStatement(resetStat)) {
+
+      // Reset the failed_attempts value in the database
+      resetStmt.setInt(1, userId);
+      resetStmt.setString(2, "active");
+      resetStmt.setInt(3, userId);
+      resetStmt.executeUpdate();
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void set_status(int userId) {
+    String resetSql = "UPDATE [User] SET account_status = ? WHERE user_id = ?";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement resetStmt = conn.prepareStatement(resetSql)) {
+
+      // Reset the failed_attempts value in the database
+      resetStmt.setString(1, "Blocked");
+      resetStmt.setInt(2, userId);
+      resetStmt.executeUpdate();
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static int get_failed_attempts(int userId) {
+    int fail_attm = -1; // Initialize with -1 to indicate an error if the user is not found
+    String sql = "SELECT failed_attempts FROM [User] WHERE user_id = ?";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+      // Set the user_id parameter in the SQL query
+      stmt.setInt(1, userId);
+      ResultSet rs = stmt.executeQuery();
+
+      // If a result is returned, retrieve the failed_attempts value
+      if (rs.next()) {
+        fail_attm = rs.getInt("failed_attempts");
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return fail_attm;
+  }
+
 
 
 }

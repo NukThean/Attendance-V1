@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "UserLogin",
+      "request": "launch",
+      "mainClass": "Login.UserLogin",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
       "name": "AdminMain",
       "request": "launch",
       "mainClass": "src.loginpage.AdminMain",

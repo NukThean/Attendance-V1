@@ -97,7 +97,8 @@ public class userPage extends JFrame {
   }
 
   private void checkIn(int userId) {
-    String sql = "INSERT INTO Attendance (employee_id, date, check_in_time, status) VALUES (?, ?, ?, ?)";
+    String sql =
+        "INSERT INTO Attendance (employee_id, date, check_in_time, status) VALUES (?, ?, ?, ?)";
 
     try (Connection conn = DatabaseConnection.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -119,16 +120,57 @@ public class userPage extends JFrame {
     }
   }
 
+  // private void checkOut(int userId) {
+  // String selectSql = "SELECT TOP 1 attendance_id FROM Attendance WHERE employee_id = ? ORDER BY
+  // attendance_id DESC";
+  // String updateSql = "UPDATE Attendance SET check_out_time = ?, status = ? WHERE attendance_id =
+  // ?";
+
+  // try (Connection conn = DatabaseConnection.getConnection();
+  // PreparedStatement selectStmt = conn.prepareStatement(selectSql);
+  // PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+
+  // // Retrieve the latest attendance_id
+  // selectStmt.setInt(1, userId);
+  // try (ResultSet rs = selectStmt.executeQuery()) {
+  // if (rs.next()) {
+  // int attendanceId = rs.getInt("attendance_id");
+
+  // // Set the check_out_time to the current time
+  // LocalTime currentTime = LocalTime.now();
+  // updateStmt.setTime(1, Time.valueOf(currentTime));
+  // updateStmt.setString(2, "Inactive");
+  // updateStmt.setInt(3, attendanceId);
+
+  // // Execute the update
+  // int rowsUpdated = updateStmt.executeUpdate();
+  // if (rowsUpdated > 0) {
+  // JOptionPane.showMessageDialog(this, "Check-out time updated successfully.", "Info",
+  // JOptionPane.INFORMATION_MESSAGE);
+  // }
+  // }
+  // }
+  // } catch (SQLException e) {
+  // JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error",
+  // JOptionPane.ERROR_MESSAGE);
+  // }
+  // }
+
+
   private void checkOut(int userId) {
-    String selectSql = "SELECT TOP 1 attendance_id FROM Attendance WHERE employee_id = ? ORDER BY attendance_id DESC";
-    String updateSql = "UPDATE Attendance SET check_out_time = ?, status = ? WHERE attendance_id = ?";
+    LocalDate currentDate = LocalDate.now();
+    String selectSql =
+        "SELECT TOP 1 attendance_id FROM Attendance WHERE employee_id = ? AND date = ? AND status = 'Active' ORDER BY attendance_id DESC";
+    String updateSql =
+        "UPDATE Attendance SET check_out_time = ?, status = ? WHERE attendance_id = ?";
 
     try (Connection conn = DatabaseConnection.getConnection();
         PreparedStatement selectStmt = conn.prepareStatement(selectSql);
         PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
 
-      // Retrieve the latest attendance_id
+      // Retrieve the latest active attendance_id for the current date
       selectStmt.setInt(1, userId);
+      selectStmt.setDate(2, Date.valueOf(currentDate));
       try (ResultSet rs = selectStmt.executeQuery()) {
         if (rs.next()) {
           int attendanceId = rs.getInt("attendance_id");
@@ -145,6 +187,9 @@ public class userPage extends JFrame {
             JOptionPane.showMessageDialog(this, "Check-out time updated successfully.", "Info",
                 JOptionPane.INFORMATION_MESSAGE);
           }
+        } else {
+          JOptionPane.showMessageDialog(this, "No active check-in found for today.", "Error",
+              JOptionPane.ERROR_MESSAGE);
         }
       }
     } catch (SQLException e) {
@@ -153,8 +198,10 @@ public class userPage extends JFrame {
     }
   }
 
+
   private boolean isStatusActive(int userId) {
-    String sql = "SELECT TOP 1 status FROM Attendance WHERE employee_id = ? ORDER BY attendance_id DESC";
+    String sql =
+        "SELECT TOP 1 status FROM Attendance WHERE employee_id = ? ORDER BY attendance_id DESC";
 
     try (Connection conn = DatabaseConnection.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {

@@ -18,8 +18,8 @@ public class UserLogin extends JFrame implements ActionListener {
   private JTextField txtUserId = new JTextField();
   private JPasswordField txtPw = new JPasswordField();
   private JCheckBox showpw = new JCheckBox("Show Password?");
-  private JButton btnNext = new JButton("Login1");
-  private JButton btnLogin = new JButton("Login2");
+  private JButton btnNext = new JButton("Login");
+  private JButton btnLogin = new JButton("Login");
   private JPanel pwPanel = new JPanel();
   private userPage userPanel;
   int error;

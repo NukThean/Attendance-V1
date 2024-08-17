@@ -13,7 +13,7 @@ public class UserLogin extends JFrame implements ActionListener {
   private JLabel lbltxt2 = new JLabel("<html><u>Forgot password?</u></html>");
   private JLabel lblPw = new JLabel("Password ");
   private JLabel lblLogin = new JLabel("<html>" + "<div style='text-align:center;'>"
-      + "<span style='font-size:17px;'>Company Name</span>");
+      + "<span style='font-size:17px;'>WHAT THE BRO</span>");
 
   private JTextField txtUserId = new JTextField();
   private JPasswordField txtPw = new JPasswordField();

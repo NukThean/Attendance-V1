@@ -1,9 +1,9 @@
 package loginpage;
 
 import javax.swing.*;
+import Admindashboard.center;
+import Admindashboard.sidebar;
 import attendance.attform;
-import dashboard.center;
-import dashboard.sidebar;
 import emp_data.*;
 import reportbt.reportform;
 import java.awt.*;

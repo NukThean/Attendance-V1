@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -201,49 +202,68 @@ public class EmpTable extends JPanel implements ActionListener {
   }
 
   public static int getStaffCount() {
-
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
     int count = 0;
+    String sql = "SELECT COUNT(*) FROM Employees";
 
-    try {
-      // Establish the connection
-      conn = DatabaseConnection.getConnection();
-      System.out.println("Info_input StaffCount: Connected to the database");
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery()) {
 
-      // Prepare the SQL COUNT statement
-      String sql = "SELECT COUNT(*) FROM Employees";
-
-      // Create the PreparedStatement
-      pstmt = conn.prepareStatement(sql);
-
-      // Execute the query
-      rs = pstmt.executeQuery();
-
-      // Retrieve the count from the ResultSet
       if (rs.next()) {
         count = rs.getInt(1);
       }
 
     } catch (SQLException e) {
       e.printStackTrace();
-    } finally {
-      // Close the resources
-      try {
-        if (rs != null) {
-          rs.close();
+    }
+
+    return count;
+  }
+
+  public static int getStaffPresent() {
+    int count = 0;
+    LocalDate today = LocalDate.now();
+    String sql = "SELECT COUNT(*) FROM ATTENDANCE WHERE status = 'active' AND date = ?";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+      pstmt.setDate(1, java.sql.Date.valueOf(today));
+
+      try (ResultSet rs = pstmt.executeQuery()) {
+        if (rs.next()) {
+          count = rs.getInt(1);
         }
-        if (pstmt != null) {
-          pstmt.close();
-        }
-        if (conn != null) {
-          conn.close();
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
       }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
     return count;
   }
+
+  public static int getStaffLate() {
+    int count = 0;
+    LocalDate today = LocalDate.now();
+    String sql = "SELECT COUNT(*) FROM ATTENDANCE WHERE status = 'active' AND date = ?";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+      pstmt.setDate(1, java.sql.Date.valueOf(today));
+
+      try (ResultSet rs = pstmt.executeQuery()) {
+        if (rs.next()) {
+          count = rs.getInt(1);
+        }
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return count;
+  }
+
+
 }

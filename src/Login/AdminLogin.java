@@ -14,7 +14,7 @@ public class AdminLogin extends JFrame implements ActionListener {
   private JLabel lbltxt2 = new JLabel("<html><u>Forgot password?</u></html>");
   private JLabel lblPw = new JLabel("Password ");
   private JLabel lblLogin = new JLabel("<html>" + "<div style='text-align:center;'>"
-      + "<span style='font-size:18px;'>Company Name</span>");
+      + "<span style='font-size:18px;'>WHAT THE BRO</span>");
   private JTextField txtUserId = new JTextField();
   private JPasswordField txtPw = new JPasswordField();
   private JCheckBox showpw = new JCheckBox("Show Password?");
@@ -194,6 +194,21 @@ public class AdminLogin extends JFrame implements ActionListener {
       public void actionPerformed(ActionEvent e) {
         // State = LoginState.VERIFY_PASSWORD;
         handleLogin();
+      }
+    });
+
+    txtUserId.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        btnNext.doClick();
+        txtPw.requestFocus();
+      }
+    });
+
+    txtPw.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        btnLogin.doClick();
       }
     });
 

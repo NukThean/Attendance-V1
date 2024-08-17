@@ -64,8 +64,8 @@ CREATE TABLE Attendance (
 	attendance_id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	employee_id INT NOT NULL,
 	date DATE NOT NULL,
-    check_in_time TIME,
-    check_out_time TIME,
+    check_in_time TIME(0),
+    check_out_time TIME(0),
     status VARCHAR(20) DEFAULT 'active',
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
 );
@@ -73,8 +73,8 @@ GO
 
 CREATE TABLE ShiftSchedule (
     employee_id INT PRIMARY KEY,
-    start_shift TIME,
-    end_shift TIME,
+    start_shift TIME(0),
+    end_shift TIME(0),
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
 );
 
@@ -94,6 +94,10 @@ DECLARE @admin_user_id INT = SCOPE_IDENTITY();
 -- Insert the corresponding admin role into the Admin table
 INSERT INTO Admin (admin_id, role)
 VALUES (@admin_user_id, 'admin');
+
 INSERT INTO [USER] (user_id, role)
 VALUES (@admin_user_id, 'user');
+
+INSERT INTO ShiftSchedule (employee_id, start_shift, end_shift)
+VALUES (@admin_user_id, '09:00:00', '17:00:00');
 

@@ -1,4 +1,4 @@
-package dashboard;
+package Admindashboard;
 
 // sub layout with sub-sub layout
 import java.time.LocalDate;
@@ -15,6 +15,7 @@ public class center extends JPanel implements ActionListener {
   int month = today.getMonthValue();
   int year = today.getYear();
   int StaffCount = EmpTable.getStaffCount();
+  int StaffPresent = EmpTable.getStaffPresent();
   // ------------------------------------------
   private JLabel txttop1 = new JLabel("Dashboard");
   private JLabel txttop2 = new JLabel("HR Department");
@@ -26,6 +27,7 @@ public class center extends JPanel implements ActionListener {
   private JLabel onleave = new JLabel("Permission Leave");
   private JLabel absent = new JLabel("Absence      ");
   private JLabel staffcount = new JLabel("" + StaffCount);
+  private JLabel staffPresent = new JLabel("" + StaffPresent);
 
   public center() {
     // ---------------------Emoji and Font--------------------
@@ -40,6 +42,7 @@ public class center extends JPanel implements ActionListener {
     onleave.setFont(new Font("Times New Roman", Font.PLAIN, 17));
     absent.setFont(new Font("Times New Roman", Font.PLAIN, 17));
     staffcount.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+    staffPresent.setFont(new Font("Times New Roman", Font.PLAIN, 30));
 
     todaydate.setForeground(Color.WHITE);
     txttop1.setForeground(Color.WHITE);
@@ -141,9 +144,11 @@ public class center extends JPanel implements ActionListener {
     ccent4.add(emojiPanel.getEmoji4(), bbc);
 
     bbc.gridx++;
-    bbc.insets = new Insets(10, 10, 50, 10);
+    bbc.insets = new Insets(10, 5, 50, 10);
     ccent4.add(present, bbc);
+    bbc.insets = new Insets(20, 20, 0, 10);
     ccent4.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    ccent4.add(staffPresent, bbc);
     // --------------------------------------------------------------------------------------
     JPanel ccent5 = new JPanel(new GridBagLayout());
     ccent5.setPreferredSize(new Dimension(200, 89));

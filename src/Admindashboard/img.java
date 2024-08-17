@@ -1,4 +1,4 @@
-package dashboard;
+package Admindashboard;
 
 // img class for clean code and easy calling image to use
 import javax.swing.*;

@@ -6,6 +6,34 @@
   "configurations": [
     {
       "type": "java",
+      "name": "TimeInputField",
+      "request": "launch",
+      "mainClass": "test.TimeInputField",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "EmpInput",
+      "request": "launch",
+      "mainClass": "emp_data.EmpInput",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "EmpTable",
+      "request": "launch",
+      "mainClass": "emp_data.EmpTable",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "AdminLogin",
+      "request": "launch",
+      "mainClass": "Login.AdminLogin",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
       "name": "UserLogin",
       "request": "launch",
       "mainClass": "Login.UserLogin",

@@ -24,6 +24,8 @@ public class EmpInput extends JFrame implements ActionListener {
   JLabel lblposition = new JLabel("Position: ");
   JLabel lbldep = new JLabel("Department: ");
   JLabel lblid = new JLabel("ID: ");
+  JLabel lblSshift = new JLabel("Start shift: ");
+  JLabel lblEshift = new JLabel("End shift: ");
 
 
   JButton btnmore = new JButton("Add more");
@@ -38,6 +40,8 @@ public class EmpInput extends JFrame implements ActionListener {
   JTextField txtposition = new JTextField();
   JComboBox<String> cmbdep = new JComboBox<>();
   JTextField txtid = new JTextField();
+  JTextField txtSshift = new JTextField();
+  JTextField txtEshift = new JTextField();
 
   public EmpInput() {
 
@@ -76,6 +80,8 @@ public class EmpInput extends JFrame implements ActionListener {
     lblposition.setFont(customFont);
     lbldep.setFont(customFont);
     lblid.setFont(customFont);
+    lblSshift.setFont(customFont);
+    lblEshift.setFont(customFont);
 
     txtname1.setFont(customFont);
     txtname2.setFont(customFont);
@@ -86,6 +92,8 @@ public class EmpInput extends JFrame implements ActionListener {
     txtposition.setFont(customFont);
     cmbdep.setFont(customFont);
     txtid.setFont(customFont);
+    txtEshift.setFont(customFont);
+    txtSshift.setFont(customFont);
     txtid.setEditable(false);
     txtid.setBackground(Color.GRAY);
 
@@ -102,11 +110,14 @@ public class EmpInput extends JFrame implements ActionListener {
     addlabeltopanel(ccenter, lblsex, err, 2, 0);
     addlabeltopanel(ccenter, lblphone, err, 3, 0);
     addlabeltopanel(ccenter, lblemail, err, 4, 0);
+    addlabeltopanel(ccenter, lblnid, err, 5, 0);
     err.insets = new Insets(5, 0, 0, 310);
-    addlabeltopanel(ccenter, lblnid, err, 0, 1);
-    addlabeltopanel(ccenter, lbldep, err, 1, 1);
-    addlabeltopanel(ccenter, lblposition, err, 2, 1);
-    addlabeltopanel(ccenter, lblid, err, 3, 1); // Add lblid to the panel
+
+    addlabeltopanel(ccenter, lbldep, err, 0, 1);
+    addlabeltopanel(ccenter, lblposition, err, 1, 1);
+    addlabeltopanel(ccenter, lblSshift, err, 2, 1);
+    addlabeltopanel(ccenter, lblEshift, err, 3, 1); // Add lblid to the panel
+    addlabeltopanel(ccenter, lblid, err, 4, 1); // Add lblid to the panel
 
     nghz.insets = new Insets(10, 120, 5, 0);
     addtxtfieldtopanel(ccenter, txtname1, nghz, 0, 0);
@@ -114,11 +125,14 @@ public class EmpInput extends JFrame implements ActionListener {
     addtxtfieldtopanel(ccenter, txtsex, nghz, 2, 0);
     addtxtfieldtopanel(ccenter, txtphone, nghz, 3, 0);
     addtxtfieldtopanel(ccenter, txtemail, nghz, 4, 0);
+    addtxtfieldtopanel(ccenter, txtnid, nghz, 5, 0);
     nghz.insets = new Insets(10, 110, 5, 0);
-    addtxtfieldtopanel(ccenter, txtnid, nghz, 0, 1);
-    addcomboboxtopanel(ccenter, cmbdep, nghz, 1, 1);
-    addtxtfieldtopanel(ccenter, txtposition, nghz, 2, 1);
-    addtxtfieldtopanel(ccenter, txtid, nghz, 3, 1); // Add txtid to the panel
+
+    addcomboboxtopanel(ccenter, cmbdep, nghz, 0, 1);
+    addtxtfieldtopanel(ccenter, txtposition, nghz, 1, 1);
+    addtxtfieldtopanel(ccenter, txtSshift, nghz, 2, 1);
+    addtxtfieldtopanel(ccenter, txtEshift, nghz, 3, 1); // Add txtid to the panel
+    addtxtfieldtopanel(ccenter, txtid, nghz, 4, 1); // Add txtid to the panel
 
     addButtonToPanel(south, btnmore);
     addButtonToPanel(south, btnfinish);
@@ -267,6 +281,7 @@ public class EmpInput extends JFrame implements ActionListener {
       String sql =
           "INSERT INTO Employees (FIRST_NAME, LAST_NAME, SEX, PHONE, EMAIL, NID, POSITION, DEPARTMENT) "
               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+      // String sql2 = "INSERT INTO ShiftSchedule(start_shift, end_shift) " + "VALUES (?,?)";
 
       // Create the PreparedStatement
       pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -358,6 +373,7 @@ public class EmpInput extends JFrame implements ActionListener {
       String nid = txtnid.getText();
       String position = txtposition.getText();
       String department = (String) cmbdep.getSelectedItem();
+
 
       // Create an emp_info object
       emp_info staff = new emp_info(0, firstName, lastName, sex, Integer.parseInt(phone), email,

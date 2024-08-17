@@ -1,4 +1,4 @@
-package dashboard;
+package Admindashboard;
 
 import javax.swing.*;
 import loginpage.AdminMain;

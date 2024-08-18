@@ -1,0 +1,35 @@
+"filename", "language", "Java", "comment", "blank", "total"
+"d:\Attendance V1\src\Admindashboard\center.java", "Java", 183, 20, 36, 239
+"d:\Attendance V1\src\Admindashboard\img.java", "Java", 55, 2, 18, 75
+"d:\Attendance V1\src\Admindashboard\sidebar.java", "Java", 97, 5, 19, 121
+"d:\Attendance V1\src\Login\AdminLogin.java", "Java", 361, 2, 83, 446
+"d:\Attendance V1\src\Login\UserLogin.java", "Java", 384, 1, 81, 466
+"d:\Attendance V1\src\attendance\attform.java", "Java", 77, 11, 20, 108
+"d:\Attendance V1\src\emp_data\EmpAmend.java", "Java", 165, 0, 26, 191
+"d:\Attendance V1\src\emp_data\EmpDelete.java", "Java", 153, 23, 32, 208
+"d:\Attendance V1\src\emp_data\EmpInput.java", "Java", 392, 25, 77, 494
+"d:\Attendance V1\src\emp_data\EmpSearch.java", "Java", 225, 22, 51, 298
+"d:\Attendance V1\src\emp_data\EmpSort.java", "Java", 143, 9, 43, 195
+"d:\Attendance V1\src\emp_data\EmpTable.java", "Java", 223, 21, 60, 304
+"d:\Attendance V1\src\emp_data\emp_info.java", "Java", 61, 1, 16, 78
+"d:\Attendance V1\src\loginpage\Admin.java", "Java", 31, 2, 10, 43
+"d:\Attendance V1\src\loginpage\AdminDatabase.java", "Java", 153, 5, 23, 181
+"d:\Attendance V1\src\loginpage\AdminMain.java", "Java", 41, 7, 15, 63
+"d:\Attendance V1\src\loginpage\Role.java", "Java", 4, 0, 3, 7
+"d:\Attendance V1\src\loginpage\User.java", "Java", 39, 2, 13, 54
+"d:\Attendance V1\src\loginpage\UserDatabase.java", "Java", 218, 20, 54, 292
+"d:\Attendance V1\src\reportbt\reportform.java", "Java", 10, 0, 3, 13
+"d:\Attendance V1\src\test\CustomTextField.java", "Java", 18, 16, 13, 47
+"d:\Attendance V1\src\test\TimeDifferenceExample.java", "Java", 19, 5, 7, 31
+"d:\Attendance V1\src\test\test.java", "Java", 22, 2, 6, 30
+"d:\Attendance V1\src\userPage\getAttendance.java", "Java", 3, 0, 3, 6
+"d:\Attendance V1\src\userPage\userPage.java", "Java", 208, 18, 54, 280
+"d:\Attendance V1\src\userPage\viewRecord.java", "Java", 56, 5, 15, 76
+"d:\Attendance V1\src\utils\ConvertTimeFormat.java", "Java", 34, 1, 6, 41
+"d:\Attendance V1\src\utils\DatabaseConnection.java", "Java", 13, 0, 5, 18
+"d:\Attendance V1\src\utils\DialogUtils.java", "Java", 42, 2, 12, 56
+"d:\Attendance V1\src\utils\EarlyResult.java", "Java", 15, 0, 6, 21
+"d:\Attendance V1\src\utils\GetTimeDiff.java", "Java", 24, 15, 15, 54
+"d:\Attendance V1\src\utils\LateResult.java", "Java", 15, 0, 5, 20
+"d:\Attendance V1\src\utils\TableUtils.java", "Java", 117, 13, 25, 155
+"Total", "-", 3601, 255, 855, 4711

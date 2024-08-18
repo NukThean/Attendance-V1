@@ -16,7 +16,8 @@ public class attform extends JPanel {
   private DefaultTableModel tableModel;
   private JScrollPane scrollpane;
 
-  String[] column = {"att_id", "emp_id", "date", "check_in_time", "check_out_time"};
+  String[] column = {"att_id", "emp_id", "date", "check_in_time", "check_out_time", "TimeDiff_in",
+      "TimeDiff_out"};
 
   public attform() {
     setLayout(new BorderLayout());
@@ -59,7 +60,7 @@ public class attform extends JPanel {
 
       // Prepare the SQL SELECT statement
       String sql =
-          "SELECT ATTENDANCE_ID, EMPLOYEE_ID, DATE, CHECK_IN_TIME, CHECK_OUT_TIME FROM Attendance ORDER BY attendance_id DESC";
+          "SELECT ATTENDANCE_ID, EMPLOYEE_ID, DATE, CHECK_IN_TIME, CHECK_OUT_TIME, TimeDiff_in, TimeDiff_out FROM Attendance ORDER BY attendance_id DESC";
 
       // Create the PreparedStatement
       pstmt = conn.prepareStatement(sql);
@@ -75,6 +76,8 @@ public class attform extends JPanel {
         row.add(rs.getDate("DATE")); // Assuming DATE is a date or timestamp column
         row.add(rs.getString("CHECK_IN_TIME"));
         row.add(rs.getString("CHECK_OUT_TIME"));
+        row.add(rs.getString("TimeDiff_in"));
+        row.add(rs.getString("TimeDiff_out"));
         tableModel.addRow(row.toArray());
       }
 

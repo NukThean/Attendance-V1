@@ -8,6 +8,7 @@ GO
 
 -- Create the Employees table
 CREATE TABLE Employees (
+    Emp_Img VARBINARY(MAX),
     employee_id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     first_name VARCHAR(20) NOT NULL,
     last_name VARCHAR(20) NOT NULL,
@@ -66,6 +67,10 @@ CREATE TABLE Attendance (
 	date DATE NOT NULL,
     check_in_time TIME(0),
     check_out_time TIME(0),
+    TimeDiff_in INT,
+    TimeDiff_out INT,
+	Late_in BIT,
+	Early_out BIT,
     status VARCHAR(20) DEFAULT 'active',
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
 );
@@ -101,3 +106,9 @@ VALUES (@admin_user_id, 'user');
 INSERT INTO ShiftSchedule (employee_id, start_shift, end_shift)
 VALUES (@admin_user_id, '09:00:00', '17:00:00');
 
+/*UPDATE Attendance
+SET lateTimeInMin = DATEDIFF(minute, start_shift, check_in_time)
+FROM Attendance AS A
+INNER JOIN ShiftSchedule AS S
+ON A.employee_id = S.employee_id;
+*/

@@ -3,16 +3,22 @@ package emp_data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import utils.DatabaseConnection;
 import utils.TableUtils;
+import utils.ImgUtils.ImageDisplayWithResize;
 
 public class EmpTable extends JPanel implements ActionListener {
 
@@ -27,8 +33,8 @@ public class EmpTable extends JPanel implements ActionListener {
   private DefaultTableModel tableModel;
   private JScrollPane scrollpane;
 
-  String[] column =
-      {"ID", "FIRST NAME", "LAST NAME", "SEX", "PHONE", "EMAIL", "POSITION", "DEPARTMENT"};
+  String[] column = {"PROFILE", "ID", "FIRST NAME", "LAST NAME", "SEX", "PHONE", "EMAIL",
+      "POSITION", "DEPARTMENT"};
 
   public EmpTable() {
     setLayout(new BorderLayout()); // Use BorderLayout for main panel
@@ -77,7 +83,7 @@ public class EmpTable extends JPanel implements ActionListener {
     // Create JScrollPane with JTable
     scrollpane = tableutil.getScrollPane(table);
 
-    err.insets = new Insets(10, 10, 10, 800);
+    err.insets = new Insets(10, 10, 10, 50);
     // northpanel.add(btnback, err);
     mainpanel.add(northpanel, BorderLayout.NORTH);
     mainpanel.add(buttonpanel, BorderLayout.SOUTH);
@@ -89,15 +95,21 @@ public class EmpTable extends JPanel implements ActionListener {
     autoRefresh();
 
     // Adjust column widths after populating the table
-    TableUtils.adjustColumnWidth(table, 0, 30);
-    TableUtils.adjustColumnWidth(table, 3, 30);
-    TableUtils.adjustColumnWidth(table, 4, 70);
+    TableUtils.adjustColumnWidth(table, 0, 60);
+    TableUtils.adjustColumnWidth(table, 1, 30);
+    TableUtils.adjustColumnWidth(table, 4, 30);
+    TableUtils.adjustColumnWidth(table, 5, 70);
+
+    TableUtils.adjustRowHeights(table);
 
   }
 
   protected void autoRefresh() {
     // Set up the auto-refresh timer
-    Timer refreshTimer = new Timer(5000, e -> populateTable());
+    Timer refreshTimer = new Timer(5000, e -> {
+      populateTable(); // Populate data
+      TableUtils.adjustRowHeights(table); // Adjust row heights
+    });
     refreshTimer.start();
   }
 
@@ -108,13 +120,14 @@ public class EmpTable extends JPanel implements ActionListener {
     PreparedStatement pstmt = null;
     ResultSet rs = null;
 
+
     try {
       // Establish the connection
       conn = DatabaseConnection.getConnection();
 
       // Prepare the SQL SELECT statement
       String sql =
-          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SEX, PHONE, EMAIL, POSITION, DEPARTMENT FROM Employees ORDER BY Department";
+          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SEX, PHONE, EMAIL, POSITION, DEPARTMENT, Emp_Img FROM Employees ORDER BY Department";
 
       // Create the PreparedStatement
       pstmt = conn.prepareStatement(sql);
@@ -125,6 +138,39 @@ public class EmpTable extends JPanel implements ActionListener {
       // Iterate over the ResultSet and populate the table model
       while (rs.next()) {
         ArrayList<Object> row = new ArrayList<>();
+
+        // Retrieve and process the image data
+        Blob blob = rs.getBlob("Emp_Img");
+        ImageIcon imageIcon = null;
+        if (blob != null) {
+          byte[] imageBytes = blob.getBytes(1, (int) blob.length());
+          ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+
+          // Convert byte array to BufferedImage
+          BufferedImage originalImage = null;
+          try {
+            originalImage = ImageIO.read(bis);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+
+          if (originalImage != null) {
+            // Resize the image while maintaining aspect ratio
+            int maxWidth = 60;
+            BufferedImage resizedImage =
+                ImageDisplayWithResize.resizeImageWithAspectRatio(originalImage, maxWidth);
+            imageIcon = new ImageIcon(resizedImage);
+          } else {
+            imageIcon = new ImageIcon(); // Empty icon for missing images
+          }
+        } else {
+          imageIcon = new ImageIcon(); // Empty icon for null blobs
+        }
+
+        row.add(imageIcon);
+
+
+
         row.add(rs.getInt("EMPLOYEE_ID"));
         row.add(rs.getString("FIRST_NAME"));
         row.add(rs.getString("LAST_NAME"));
@@ -133,6 +179,8 @@ public class EmpTable extends JPanel implements ActionListener {
         row.add(rs.getString("EMAIL"));
         row.add(rs.getString("POSITION"));
         row.add(rs.getString("DEPARTMENT"));
+
+
         tableModel.addRow(row.toArray());
       }
 
@@ -245,7 +293,12 @@ public class EmpTable extends JPanel implements ActionListener {
   public static int getStaffLate() {
     int count = 0;
     LocalDate today = LocalDate.now();
-    String sql = "SELECT COUNT(*) FROM ATTENDANCE WHERE status = 'active' AND date = ?";
+    // String sql = "SELECT COUNT(*) FROM Attendance AS A "
+    // + "JOIN ShiftSchedule AS S ON A.employee_id = S.employee_id "
+    // + "JOIN Employees E ON A.employee_id = E.employee_id "
+    // + "WHERE A.check_in_time > S.start_shift AND A.date = ?";
+
+    String sql = "SELECT COUNT(*) FROM Attendance WHERE Late_in = '1' AND date = ?";
 
     try (Connection conn = DatabaseConnection.getConnection();
         PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -254,7 +307,7 @@ public class EmpTable extends JPanel implements ActionListener {
 
       try (ResultSet rs = pstmt.executeQuery()) {
         if (rs.next()) {
-          count = rs.getInt(1);
+          count = rs.getInt(1); // This should give you the number of rows
         }
       }
 
@@ -264,6 +317,35 @@ public class EmpTable extends JPanel implements ActionListener {
 
     return count;
   }
+
+  public static int getStaffEarlyOut() {
+    int count = 0;
+    LocalDate today = LocalDate.now();
+    // String sql = "SELECT COUNT(*) FROM Attendance AS A "
+    // + "JOIN ShiftSchedule AS S ON A.employee_id = S.employee_id "
+    // + "JOIN Employees E ON A.employee_id = E.employee_id "
+    // + "WHERE A.check_in_time > S.start_shift AND A.date = ?";
+
+    String sql = "SELECT COUNT(*) FROM Attendance WHERE Early_out = '1' AND date = ?";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+      pstmt.setDate(1, java.sql.Date.valueOf(today));
+
+      try (ResultSet rs = pstmt.executeQuery()) {
+        if (rs.next()) {
+          count = rs.getInt(1); // This should give you the number of rows
+        }
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return count;
+  }
+
 
 
 }

@@ -95,6 +95,9 @@ public class TableUtils extends JPanel {
     header.setDefaultRenderer(new CustomHeaderRenderer());
     header.setFont(new Font("Arial", Font.BOLD, 14));
 
+    // Adjust initial row heights
+    adjustRowHeights(table);
+
     return table;
   }
 
@@ -105,6 +108,18 @@ public class TableUtils extends JPanel {
     column.setMinWidth(width);
     column.setMaxWidth(width);
   }
+
+  public static void adjustRowHeights(JTable table) {
+    for (int row = 0; row < table.getRowCount(); row++) {
+      Object value = table.getValueAt(row, 0); // Adjust column index as needed
+      if (value instanceof ImageIcon) {
+        ImageIcon icon = (ImageIcon) value;
+        int newHeight = icon.getIconHeight() + 8; // Add padding
+        table.setRowHeight(row, newHeight);
+      }
+    }
+  }
+
 
   private static JLabel createCornerLabel() {
     JLabel cornerLabel = new JLabel("");
@@ -117,6 +132,23 @@ public class TableUtils extends JPanel {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
         boolean hasFocus, int row, int column) {
+
+      if (value instanceof ImageIcon) {
+
+        ImageIcon icon = (ImageIcon) value;
+        JLabel label = new JLabel(icon);
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+
+        // Remove any border or padding by setting an EmptyBorder with 0 insets
+        label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+        // Set row height to match image height
+        table.setRowHeight(row, icon.getIconHeight());
+
+        return label;
+      }
+
       Component c =
           super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
       if (!isSelected) {

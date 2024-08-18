@@ -3,11 +3,15 @@ package userPage;
 import javax.swing.*;
 import loginpage.User;
 import utils.DatabaseConnection;
+import utils.EarlyResult;
+import utils.GetTimeDiff;
+import utils.LateResult;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class userPage extends JFrame {
   private User user;
@@ -96,19 +100,29 @@ public class userPage extends JFrame {
 
   private void checkIn(int userId) {
     String sql =
-        "INSERT INTO Attendance (employee_id, date, check_in_time, status) VALUES (?, ?, ?, ?)";
+        "INSERT INTO Attendance (employee_id, date, check_in_time, TimeDiff_in, Late_in, status) VALUES (?, ?, ?, ?, ?, ?)";
 
     try (Connection conn = DatabaseConnection.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
       // Get the current date and time
       LocalDate currentDate = LocalDate.now();
       LocalTime currentTime = LocalTime.now();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+      String formattedTime = currentTime.format(formatter);
+      String StartShift = getStartShift(userId);
+      GetTimeDiff.getIn_Diff(StartShift, formattedTime);
+
+      Long LateTime = LateResult.getMinutesLate();
+      boolean isLate = LateResult.isLate();
 
       stmt.setInt(1, userId);
       stmt.setDate(2, Date.valueOf(currentDate));
       stmt.setTime(3, Time.valueOf(currentTime));
-      stmt.setString(4, "Active");
+      stmt.setLong(4, LateTime);
+      stmt.setBoolean(5, isLate);
+      stmt.setString(6, "Active");
       stmt.executeUpdate();
+
 
       JOptionPane.showMessageDialog(this, "Checked in successfully!", "Success",
           JOptionPane.INFORMATION_MESSAGE);
@@ -116,43 +130,9 @@ public class userPage extends JFrame {
       JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error",
           JOptionPane.ERROR_MESSAGE);
     }
+
   }
 
-  // private void checkOut(int userId) {
-  // String selectSql = "SELECT TOP 1 attendance_id FROM Attendance WHERE employee_id = ? ORDER BY
-  // attendance_id DESC";
-  // String updateSql = "UPDATE Attendance SET check_out_time = ?, status = ? WHERE attendance_id =
-  // ?";
-
-  // try (Connection conn = DatabaseConnection.getConnection();
-  // PreparedStatement selectStmt = conn.prepareStatement(selectSql);
-  // PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
-
-  // // Retrieve the latest attendance_id
-  // selectStmt.setInt(1, userId);
-  // try (ResultSet rs = selectStmt.executeQuery()) {
-  // if (rs.next()) {
-  // int attendanceId = rs.getInt("attendance_id");
-
-  // // Set the check_out_time to the current time
-  // LocalTime currentTime = LocalTime.now();
-  // updateStmt.setTime(1, Time.valueOf(currentTime));
-  // updateStmt.setString(2, "Inactive");
-  // updateStmt.setInt(3, attendanceId);
-
-  // // Execute the update
-  // int rowsUpdated = updateStmt.executeUpdate();
-  // if (rowsUpdated > 0) {
-  // JOptionPane.showMessageDialog(this, "Check-out time updated successfully.", "Info",
-  // JOptionPane.INFORMATION_MESSAGE);
-  // }
-  // }
-  // }
-  // } catch (SQLException e) {
-  // JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error",
-  // JOptionPane.ERROR_MESSAGE);
-  // }
-  // }
 
 
   private void checkOut(int userId) {
@@ -160,7 +140,7 @@ public class userPage extends JFrame {
     String selectSql =
         "SELECT TOP 1 attendance_id FROM Attendance WHERE employee_id = ? AND date = ? AND status = 'Active' ORDER BY attendance_id DESC";
     String updateSql =
-        "UPDATE Attendance SET check_out_time = ?, status = ? WHERE attendance_id = ?";
+        "UPDATE Attendance SET check_out_time = ?, status = ?, TimeDiff_out = ?, Early_out = ? WHERE attendance_id = ?";
 
     try (Connection conn = DatabaseConnection.getConnection();
         PreparedStatement selectStmt = conn.prepareStatement(selectSql);
@@ -169,15 +149,31 @@ public class userPage extends JFrame {
       // Retrieve the latest active attendance_id for the current date
       selectStmt.setInt(1, userId);
       selectStmt.setDate(2, Date.valueOf(currentDate));
+
+
+
       try (ResultSet rs = selectStmt.executeQuery()) {
         if (rs.next()) {
           int attendanceId = rs.getInt("attendance_id");
 
-          // Set the check_out_time to the current time
+          currentDate = LocalDate.now();
           LocalTime currentTime = LocalTime.now();
+          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+          String formattedTime = currentTime.format(formatter);
+          String EndShift = getEndShift(userId);
+          GetTimeDiff.getLeave_Diff(EndShift, formattedTime);
+
+          Long LeaveTime = EarlyResult.getMinutesEarly();
+          System.out.println(LeaveTime);
+
+          boolean isEarlyOut = EarlyResult.isEarly();
+
+
           updateStmt.setTime(1, Time.valueOf(currentTime));
           updateStmt.setString(2, "Inactive");
-          updateStmt.setInt(3, attendanceId);
+          updateStmt.setLong(3, LeaveTime);
+          updateStmt.setBoolean(4, isEarlyOut);
+          updateStmt.setInt(5, attendanceId);
 
           // Execute the update
           int rowsUpdated = updateStmt.executeUpdate();
@@ -220,4 +216,64 @@ public class userPage extends JFrame {
       return false;
     }
   }
+
+
+  private String getStartShift(int userId) {
+    String sql = "SELECT S.start_shift " + "FROM Employees AS E " + "JOIN ShiftSchedule AS S "
+        + "ON S.employee_id = E.employee_id " + "WHERE E.employee_id = ?;"; // Placeholder for
+                                                                            // userId
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+      // Set the employee_id parameter dynamically
+      stmt.setInt(1, userId);
+
+      // Execute the query and process the result
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+          // Return the start_shift time as a string
+          return rs.getString("start_shift");
+        } else {
+          // If no result, return null or some default value
+          return null;
+        }
+      }
+    } catch (SQLException e) {
+      // Handle any SQL exceptions
+      JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error",
+          JOptionPane.ERROR_MESSAGE);
+      return null;
+    }
+  }
+
+  private String getEndShift(int userId) {
+    String sql = "SELECT S.End_shift " + "FROM Employees AS E " + "JOIN ShiftSchedule AS S "
+        + "ON S.employee_id = E.employee_id " + "WHERE E.employee_id = ?;"; // Placeholder for
+                                                                            // userId
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+      // Set the employee_id parameter dynamically
+      stmt.setInt(1, userId);
+
+      // Execute the query and process the result
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+          // Return the start_shift time as a string
+          return rs.getString("end_shift");
+        } else {
+          // If no result, return null or some default value
+          return null;
+        }
+      }
+    } catch (SQLException e) {
+      // Handle any SQL exceptions
+      JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error",
+          JOptionPane.ERROR_MESSAGE);
+      return null;
+    }
+  }
+
 }

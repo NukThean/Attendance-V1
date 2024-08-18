@@ -6,6 +6,125 @@
   "configurations": [
     {
       "type": "java",
+      "name": "ImageDisplayWithResize",
+      "request": "launch",
+      "mainClass": "utils.ImgUtils.ImageDisplayWithResize",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "CustomFileChooser",
+      "request": "launch",
+      "mainClass": "test.CustomFileChooser",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "ImageDisplayWithResize",
+      "request": "launch",
+      "mainClass": "utils.ImageUtils.ImageDisplayWithResize",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "ImageUploaderDragDrop",
+      "request": "launch",
+      "mainClass": "utils.ImageUtils.ImageUploaderDragDrop",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "ImageDisplayWithResize",
+      "request": "launch",
+      "mainClass": "test.ImageDisplayWithResize",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "ImageDisplayExample",
+      "request": "launch",
+      "mainClass": "test.ImageDisplayExample",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "ImageUploaderDragDrop",
+      "request": "launch",
+      "mainClass": "test.ImageUploaderDragDrop",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "ImageUploader",
+      "request": "launch",
+      "mainClass": "test.ImageUploader",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "Timeutil",
+      "request": "launch",
+      "mainClass": "test.Timeutil",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "GetLate",
+      "request": "launch",
+      "mainClass": "utils.GetLate",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "ConvertTimeFormat",
+      "request": "launch",
+      "mainClass": "utils.ConvertTimeFormat",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "test",
+      "request": "launch",
+      "mainClass": "test.test",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "DateTimeFormatDemo",
+      "request": "launch",
+      "mainClass": "test.DateTimeFormatDemo",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "CustomTextField",
+      "request": "launch",
+      "mainClass": "test.CustomTextField",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "CustomBorderExample",
+      "request": "launch",
+      "mainClass": "test.CustomBorderExample",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "Test",
+      "request": "launch",
+      "mainClass": "test.Test",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "TimeDifferenceExample",
+      "request": "launch",
+      "mainClass": "test.TimeDifferenceExample",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
       "name": "TimeInputField",
       "request": "launch",
       "mainClass": "test.TimeInputField",

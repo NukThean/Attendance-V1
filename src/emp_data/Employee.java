@@ -1,6 +1,6 @@
 package emp_data;
 
-public class emp_info {
+public class Employee {
   private int id;
   private String firstName;
   private String lastName;
@@ -10,11 +10,13 @@ public class emp_info {
   private String position;
   private String department;
   private String sex;
+  private String sShift;
+  private String eShift;
 
   // data for use with arraylist in empform and Info_input
 
-  public emp_info(int id, String firstName, String lastName, String sex, int phone, String email,
-      int nid, String position, String department) {
+  public Employee(int id, String firstName, String lastName, String sex, int phone, String email,
+      int nid, String position, String department, String sShift, String eShift) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -24,6 +26,8 @@ public class emp_info {
     this.nid = nid;
     this.position = position;
     this.department = department;
+    this.sShift = sShift;
+    this.eShift = eShift;
   }
 
   public int getId() {
@@ -56,6 +60,14 @@ public class emp_info {
 
   public String getDepartment() {
     return department;
+  }
+
+  public String getStartshift() {
+    return sShift;
+  }
+
+  public String getEndshift() {
+    return eShift;
   }
 
   public String getSex() {

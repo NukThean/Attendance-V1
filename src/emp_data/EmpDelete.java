@@ -67,6 +67,7 @@ public class EmpDelete extends EmpInput {
     yesButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
+        System.out.println("Yes clicked");
         handleDeletion(id);
         frame.dispose();
       }
@@ -122,7 +123,7 @@ public class EmpDelete extends EmpInput {
     try {
       // Establish the connection
       conn = DatabaseConnection.getConnection();
-      System.out.println("Info_input_insert: Connected to the database");
+      System.out.println("EmpDelete.getStaffNameById: Connected to the database");
 
       // Prepare the SQL INSERT statement
       String sql = "SELECT FIRST_NAME, LAST_NAME FROM Employees WHERE EMPLOYEE_ID = ?";
@@ -168,7 +169,7 @@ public class EmpDelete extends EmpInput {
     try {
       // Establish the connection
       conn = DatabaseConnection.getConnection();
-      System.out.println("Info_input_delete: Connected to the database");
+      System.out.println("EmpDelete.deleteStaffInfo: Connected to the database");
 
       // Prepare the SQL DELETE statement
       String sql = "DELETE FROM Employees WHERE EMPLOYEE_ID = ?";

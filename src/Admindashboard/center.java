@@ -16,6 +16,8 @@ public class center extends JPanel implements ActionListener {
   int year = today.getYear();
   int StaffCount = EmpTable.getStaffCount();
   int StaffPresent = EmpTable.getStaffPresent();
+  int StaffLate = EmpTable.getStaffLate();
+  int StaffEarlyOut = EmpTable.getStaffEarlyOut();
   // ------------------------------------------
   private JLabel txttop1 = new JLabel("Dashboard");
   private JLabel txttop2 = new JLabel("HR Department");
@@ -25,9 +27,11 @@ public class center extends JPanel implements ActionListener {
   private JLabel earlyout = new JLabel("Early Leave");
   private JLabel present = new JLabel("Present      ");
   private JLabel onleave = new JLabel("Permission Leave");
-  private JLabel absent = new JLabel("Absence      ");
+  private JLabel absent = new JLabel("T-1 Absence");
   private JLabel staffcount = new JLabel("" + StaffCount);
   private JLabel staffPresent = new JLabel("" + StaffPresent);
+  private JLabel stafflate = new JLabel("" + StaffLate);
+  private JLabel staffEarlyOut = new JLabel("" + StaffEarlyOut);
 
   public center() {
     // ---------------------Emoji and Font--------------------
@@ -43,6 +47,8 @@ public class center extends JPanel implements ActionListener {
     absent.setFont(new Font("Times New Roman", Font.PLAIN, 17));
     staffcount.setFont(new Font("Times New Roman", Font.PLAIN, 30));
     staffPresent.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+    stafflate.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+    staffEarlyOut.setFont(new Font("Times New Roman", Font.PLAIN, 30));
 
     todaydate.setForeground(Color.WHITE);
     txttop1.setForeground(Color.WHITE);
@@ -114,7 +120,10 @@ public class center extends JPanel implements ActionListener {
     bbc.gridx++;
     bbc.insets = new Insets(10, 0, 50, 10);
     ccent2.add(late, bbc);
+    bbc.insets = new Insets(20, 45, 0, 10);
+    // bbc.gridy++;
     ccent2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    ccent2.add(stafflate, bbc);
     // --------------------------------------------------------------------------------------
     JPanel ccent3 = new JPanel(new GridBagLayout());
     ccent3.setPreferredSize(new Dimension(200, 89));
@@ -131,6 +140,8 @@ public class center extends JPanel implements ActionListener {
     bbc.insets = new Insets(10, 10, 50, 30);
     ccent3.add(earlyout, bbc);
     ccent3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    bbc.insets = new Insets(20, 45, 0, 10);
+    ccent3.add(staffEarlyOut, bbc);
     // --------------------------------------------------------------------------------------
     JPanel ccent4 = new JPanel(new GridBagLayout());
     ccent4.setPreferredSize(new Dimension(200, 89));
@@ -169,7 +180,7 @@ public class center extends JPanel implements ActionListener {
     JPanel ccent6 = new JPanel(new GridBagLayout());
     ccent6.setPreferredSize(new Dimension(200, 89));
     ccent6.setBackground(new Color(224, 224, 224));
-    bbc.insets = new Insets(10, 10, 30, 30);
+    bbc.insets = new Insets(10, 0, 30, 20);
 
     bbc.fill = GridBagConstraints.HORIZONTAL;
     bbc.gridx = 0;
@@ -179,7 +190,7 @@ public class center extends JPanel implements ActionListener {
     ccent6.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
     bbc.gridx++;
-    bbc.insets = new Insets(10, 10, 50, 10);
+    bbc.insets = new Insets(10, 0, 50, 15);
     ccent6.add(absent, bbc);
     // --------------------------------------------------------------------------------------
 

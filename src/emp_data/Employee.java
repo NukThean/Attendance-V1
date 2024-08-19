@@ -15,8 +15,8 @@ public class Employee {
 
   // data for use with arraylist in empform and Info_input
 
-  public Employee(int id, String firstName, String lastName, String sex, int phone, String email,
-      int nid, String position, String department, String sShift, String eShift) {
+  public Employee(String Emp_img, int id, String firstName, String lastName, String sex, int phone,
+      String email, int nid, String position, String department, String sShift, String eShift) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;

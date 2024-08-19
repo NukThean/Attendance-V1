@@ -18,6 +18,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.filechooser.FileView;
 import loginpage.User;
 import test.CustomTextField;
 import utils.ConvertTimeFormat;
@@ -25,7 +26,14 @@ import utils.DatabaseConnection;
 import utils.GetTimeDiff;
 import utils.LateResult;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.util.Date;
 
 public class EmpInput extends JFrame implements ActionListener {
@@ -47,7 +55,7 @@ public class EmpInput extends JFrame implements ActionListener {
 
   JButton btnmore = new JButton("Add more");
   JButton btnfinish = new JButton("Finish");
-  static JButton btnselectFile = new JButton("Select Image...");
+  static JButton btnselectFile = new JButton("Select Image");
 
   JTextField txtname1 = new JTextField();
   JTextField txtname2 = new JTextField();
@@ -67,9 +75,11 @@ public class EmpInput extends JFrame implements ActionListener {
   CustomTextField txtEshift2 = new CustomTextField(3, 0, 0, 1, 0, 1, 1, Color.BLACK, "");
   CustomTextField txtblank2 = new CustomTextField(3, 0, 0, 1, 0, 1, 0, Color.BLACK, ":");
   Dimension customSize = new Dimension(0, 0);
+  static JTextField txtFileLocation = new JTextField();
 
   static String startShift;
   static String endShift;
+
 
   static File selectedFile;
 
@@ -134,34 +144,39 @@ public class EmpInput extends JFrame implements ActionListener {
     txtSshift2.setFont(customFont);
     txtblank1.setFont(customFont);
     txtblank2.setFont(customFont);
+    txtFileLocation.setFont(customFont);
     txtid.setEditable(false);
     txtid.setBackground(Color.GRAY);
 
     btnfinish.setFont(customFont);
     btnmore.setFont(customFont);
+    txtFileLocation.setEnabled(false);
+    customFont = new Font("Times New Roman", Font.PLAIN, 14);
+    btnselectFile.setFont(customFont);
+    customFont = new Font("Times New Roman", Font.PLAIN, 16);
 
     btnmore.addActionListener(this);
     btnfinish.addActionListener(this);
 
     err.insets = new Insets(5, 15, 0, 310);
-    addlabeltopanel(ccenter, lblname1, err, 0, 0);
+    addlabeltopanel(ccenter, lblname1, err, 0, 0, null);
     err.insets = new Insets(10, 15, 5, 310);
-    addlabeltopanel(ccenter, lblname2, err, 1, 0);
-    addlabeltopanel(ccenter, lblsex, err, 2, 0);
-    addlabeltopanel(ccenter, lblphone, err, 3, 0);
-    addlabeltopanel(ccenter, lblemail, err, 4, 0);
-    addlabeltopanel(ccenter, lblnid, err, 5, 0);
+    addlabeltopanel(ccenter, lblname2, err, 1, 0, null);
+    addlabeltopanel(ccenter, lblsex, err, 2, 0, null);
+    addlabeltopanel(ccenter, lblphone, err, 3, 0, null);
+    addlabeltopanel(ccenter, lblemail, err, 4, 0, null);
+    addlabeltopanel(ccenter, lblnid, err, 5, 0, null);
     err.insets = new Insets(5, 0, 0, 310);
 
-    addlabeltopanel(ccenter, lbldep, err, 0, 1);
-    addlabeltopanel(ccenter, lblposition, err, 1, 1);
-    addlabeltopanel(ccenter, lblSshift, err, 2, 1);
-    addlabeltopanel(ccenter, lblUploadImg, err, 3, 1);
-    addlabeltopanel(ccenter, lblid, err, 4, 1); // Add lblid to the panel
+    addlabeltopanel(ccenter, lbldep, err, 0, 1, null);
+    addlabeltopanel(ccenter, lblposition, err, 1, 1, null);
+    addlabeltopanel(ccenter, lblSshift, err, 2, 1, null);
+    addlabeltopanel(ccenter, lblUploadImg, err, 3, 1, null);
+    addlabeltopanel(ccenter, lblid, err, 4, 1, null); // Add lblid to the panel
     err.insets = new Insets(0, 300, 0, 0);
 
     err.insets = new Insets(5, 70, 0, 0);
-    addlabeltopanel(ccenter, lblEshift, err, 2, 1); // Add lblid to the panel
+    addlabeltopanel(ccenter, lblEshift, err, 2, 1, null); // Add lblid to the panel
 
     nghz.insets = new Insets(10, 75, 5, 0);
     addtxtfieldtopanel(ccenter, txtname1, nghz, 0, 0, null);
@@ -177,6 +192,12 @@ public class EmpInput extends JFrame implements ActionListener {
     addtxtfieldtopanel(ccenter, txtSshift1, nghz, 2, 1, null);
     addtxtfieldtopanel(ccenter, txtEshift1, nghz, 3, 1, null); // Add txtid to the panel
     addtxtfieldtopanel(ccenter, txtid, nghz, 4, 1, null); // Add txtid to the panel
+
+    nghz.insets = new Insets(10, 0, 5, 15);
+    customSize = new Dimension(200, 30);
+    addtxtfieldtopanel(ccenter, txtFileLocation, nghz, 3, 1, customSize);
+
+
     customSize = new Dimension(20, 30);
 
     nghz.insets = new Insets(10, 0, 5, 195);
@@ -186,7 +207,6 @@ public class EmpInput extends JFrame implements ActionListener {
 
     nghz.insets = new Insets(10, 185, 5, 0);
     addtxtfieldtopanel(ccenter, txtEshift1, nghz, 2, 1, customSize); // Add txtid to the panel
-
     nghz.insets = new Insets(10, 235, 5, 0);
     addtxtfieldtopanel(ccenter, txtEshift2, nghz, 2, 1, customSize); // Add txtid to the panel
 
@@ -211,13 +231,13 @@ public class EmpInput extends JFrame implements ActionListener {
     setLocationRelativeTo(null); // Center the frame on the screen
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-    btnselectFile.setPreferredSize(new Dimension(290, 30));
-    btnselectFile.setMinimumSize(new Dimension(290, 30));
+    btnselectFile.setPreferredSize(new Dimension(86, 29));
+    btnselectFile.setMinimumSize(new Dimension(86, 29));
     btnselectFile.setBackground(Color.LIGHT_GRAY);
     btnselectFile.setFocusPainted(false);
-    btnselectFile.setMargin(new Insets(0, 5, 0, 5));
+    btnselectFile.setMargin(new Insets(0, 0, 0, 0));
     btnselectFile.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    nghz.insets = new Insets(5, 70, 0, 0);
+    nghz.insets = new Insets(5, 270, 0, 0);
     nghz.gridx = 1;
     nghz.gridy = 3;
     south.setBackground(Color.white);
@@ -238,11 +258,25 @@ public class EmpInput extends JFrame implements ActionListener {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select an image");
 
+        // Set custom icons for files and directories
+        fileChooser.setFileView(new FileView() {
+          @Override
+          public Icon getIcon(File f) {
+            if (f.isDirectory()) {
+              return new ImageIcon("path_to_custom_folder_icon.png"); // Update the path to your
+                                                                      // custom folder icon
+            } else {
+              return new ImageIcon("path_to_custom_file_icon.png"); // Update the path to your
+                                                                    // custom file icon
+            }
+          }
+        });
+
         // Set the file filter to accept only image files
         fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
           @Override
           public boolean accept(File f) {
-            // Accept directories and image files only (e.g., .jpg, .png, .gif)
+            // Accept directories and image files only (e.g., .jpg, .jpeg, .png, .gif)
             if (f.isDirectory()) {
               return true;
             } else {
@@ -263,19 +297,67 @@ public class EmpInput extends JFrame implements ActionListener {
 
         // If the user selected a file, store it for future use
         if (result == JFileChooser.APPROVE_OPTION) {
-          selectedFile = fileChooser.getSelectedFile();
+          File selectedFile = fileChooser.getSelectedFile();
+          txtFileLocation.setText(selectedFile.getAbsolutePath());
           System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-
-          // Optionally, you can store the image path or immediately upload it
-          // uploadImage(selectedFile.getAbsolutePath(), employeeId); // You can replace
-          // `employeeId` with the actual employee's ID
         }
+      }
+    });
+
+    // Add drag-and-drop functionality
+    DropTarget dropTarget = new DropTarget(txtFileLocation, new DropTargetListener() {
+      @Override
+      public void dragEnter(DropTargetDragEvent dtde) {
+        // Optional: Add visual feedback for drag enter
+      }
+
+      @Override
+      public void dragOver(DropTargetDragEvent dtde) {
+        // Optional: Add visual feedback for drag over
+      }
+
+      @Override
+      public void dropActionChanged(DropTargetDragEvent dtde) {
+        // Optional: Handle any changes in the drop action
+      }
+
+
+
+      @Override
+      public void drop(DropTargetDropEvent e) {
+        try {
+          int id = 1; // Replace with the actual ID logic if needed
+          e.acceptDrop(DnDConstants.ACTION_COPY);
+          Transferable transferable = e.getTransferable();
+          if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+            java.util.List<?> files =
+                (java.util.List<?>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+            if (!files.isEmpty()) {
+              File file = (File) files.get(0);
+              uploadImage(file.getAbsolutePath(), id);
+
+              txtFileLocation.setText(file.getAbsolutePath());
+              System.out.println("Dropped file: " + file.getAbsolutePath());
+            }
+          }
+          e.dropComplete(true);
+        } catch (Exception ex) {
+          ex.printStackTrace();
+          e.rejectDrop();
+        }
+      }
+
+      @Override
+      public void dragExit(DropTargetEvent dte) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'dragExit'");
       }
     });
 
 
 
     txtname1.addActionListener(new ActionListener() {
+
       @Override
       public void actionPerformed(ActionEvent e) {
         txtname2.requestFocus();
@@ -346,11 +428,17 @@ public class EmpInput extends JFrame implements ActionListener {
   }
 
   private void addlabeltopanel(JPanel panell, JLabel Label, GridBagConstraints err, int gridy,
-      int gridx) {
+      int gridx, Dimension size) {
     err.gridy = gridy;
     err.gridx = gridx;
-    Label.setPreferredSize(new Dimension(78, 30));
-    Label.setMinimumSize(new Dimension(78, 30));
+    if (size != null) {
+      Label.setPreferredSize(size);
+      Label.setMinimumSize(size);
+      Label.setMaximumSize(size);
+    } else {
+      Label.setPreferredSize(new Dimension(78, 30));
+      Label.setMinimumSize(new Dimension(78, 30));
+    }
     Label.setBackground(Color.WHITE);
     Label.setOpaque(true);
     panell.add(Label, err);
@@ -425,6 +513,7 @@ public class EmpInput extends JFrame implements ActionListener {
     txtEshift2.setText("");
     txtSshift1.setText("");
     txtSshift2.setText("");
+    txtFileLocation.setText("Drop or Select Pic");
   }
 
   public static void insertStaffInfo(ArrayList<Employee> staffList) {
@@ -484,7 +573,7 @@ public class EmpInput extends JFrame implements ActionListener {
             userPstmt.executeUpdate(); // Execute the insert for the User table
             empPstmt.executeUpdate();
 
-            uploadImage(selectedFile.getAbsolutePath(), employeeId);
+            uploadImage(txtFileLocation.getText(), employeeId);
           }
         }
       }
@@ -564,7 +653,7 @@ public class EmpInput extends JFrame implements ActionListener {
           + (String) cmbTime1.getSelectedItem();
 
       // Create an emp_info object
-      Employee staff = new Employee(0, firstName, lastName, sex, Integer.parseInt(phone), email,
+      Employee staff = new Employee("", 0, firstName, lastName, sex, Integer.parseInt(phone), email,
           Integer.parseInt(nid), position, department, startShift, endShift);
 
       // Insert the data into the database
@@ -593,7 +682,7 @@ public class EmpInput extends JFrame implements ActionListener {
 
 
       // Create an emp_info object
-      Employee staff = new Employee(0, firstName, lastName, sex, Integer.parseInt(phone), email,
+      Employee staff = new Employee("", 0, firstName, lastName, sex, Integer.parseInt(phone), email,
           Integer.parseInt(nid), position, department, startShift, endShift);
 
       // Insert the data into the database

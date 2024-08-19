@@ -30,7 +30,7 @@ public class EmpAmend extends EmpInput {
         amendFrame.txtphone, amendFrame.txtemail, amendFrame.txtnid, amendFrame.txtposition,
         amendFrame.cmbdep, amendFrame.txtEshift1, amendFrame.txtEshift2, amendFrame.txtSshift1,
         amendFrame.txtSshift2, amendFrame.txtblank1, amendFrame.txtblank2, amendFrame.cmbTime1,
-        amendFrame.cmbTime2);
+        amendFrame.cmbTime2, amendFrame.txtFileLocation);
   }
 
   public void showAmendDialog() {
@@ -61,7 +61,8 @@ public class EmpAmend extends EmpInput {
       JTextField txtname2, JTextField txtsex, JTextField txtphone, JTextField txtemail,
       JTextField txtnid, JTextField txtposition, JComboBox<String> cmbdep, JTextField txtEshift1,
       JTextField txtEshift2, JTextField txtSshift1, JTextField txtSshift2, JTextField txtblank1,
-      JTextField txtblank2, JComboBox<String> cmbTime1, JComboBox<String> cmbTime2) {
+      JTextField txtblank2, JComboBox<String> cmbTime1, JComboBox<String> cmbTime2,
+      JTextField txtFileLocation) {
 
     Connection conn = null;
     PreparedStatement pstmt = null;
@@ -76,7 +77,7 @@ public class EmpAmend extends EmpInput {
       // FROM Employees WHERE EMPLOYEE_ID = ?";
 
       String sql =
-          "SELECT E.EMPLOYEE_ID, E.FIRST_NAME, E.LAST_NAME, E.SEX, E.PHONE, E.EMAIL, E.NID, E.POSITION, E.DEPARTMENT, S.start_shift, S.end_shift "
+          "SELECT E.EMP_IMG, E.EMPLOYEE_ID, E.FIRST_NAME, E.LAST_NAME, E.SEX, E.PHONE, E.EMAIL, E.NID, E.POSITION, E.DEPARTMENT, S.start_shift, S.end_shift "
               + "FROM Employees AS E INNER JOIN ShiftSchedule AS S "
               + "ON E.employee_id = S.employee_id " + "WHERE E.EMPLOYEE_ID = ? ";
 
@@ -97,6 +98,7 @@ public class EmpAmend extends EmpInput {
         String department = rs.getString("DEPARTMENT");
         String startShift24h = rs.getString("start_shift");
         String endShift24h = rs.getString("end_shift");
+        // String fileLocation = rs.getString("emp_img");
 
         String startShift12h = ConvertTimeFormat.ConvertTo12h(startShift24h);
         String endShift12h = ConvertTimeFormat.ConvertTo12h(endShift24h);
@@ -136,6 +138,7 @@ public class EmpAmend extends EmpInput {
         txtSshift2.setText(startShift2);
         txtEshift1.setText(endShift1);
         txtEshift2.setText(endShift2);
+        txtFileLocation.setText("Drop or Select Pic");
 
         txtblank1.setText(":");
         txtblank2.setText(":");
@@ -233,14 +236,17 @@ public class EmpAmend extends EmpInput {
     String nid = txtnid.getText();
     String position = txtposition.getText();
     String department = (String) cmbdep.getSelectedItem();
+    String filelocation = txtFileLocation.getText();
+
 
     String startShift = ConvertTimeFormat.ConvertTo24h(txtSshift1.getText() + txtblank1.getText()
         + txtSshift2.getText() + ":00 " + (String) cmbTime1.getSelectedItem());
     String endShift = ConvertTimeFormat.ConvertTo24h(txtEshift1.getText() + txtblank2.getText()
         + txtEshift2.getText() + ":00 " + (String) cmbTime2.getSelectedItem());
 
-    Employee staff = new Employee(id, firstName, lastName, sex, Integer.parseInt(phone), email,
-        Integer.parseInt(nid), position, department, startShift, endShift);
+    Employee staff =
+        new Employee(filelocation, id, firstName, lastName, sex, Integer.parseInt(phone), email,
+            Integer.parseInt(nid), position, department, startShift, endShift);
 
     if (e.getSource() == btnmore) {
       System.out.println("Preparing to amend Staff information");
@@ -252,6 +258,7 @@ public class EmpAmend extends EmpInput {
       System.out.println("Preparing to amend Staff information");
       updateStaffInfo(staff);
       dispose();
+      uploadImage(filelocation, id);
     }
   }
 }

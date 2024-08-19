@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "ImageUploaderDragDrop",
+      "request": "launch",
+      "mainClass": "utils.ImgUtils.ImageUploaderDragDrop",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
       "name": "ImageDisplayWithResize",
       "request": "launch",
       "mainClass": "utils.ImgUtils.ImageDisplayWithResize",

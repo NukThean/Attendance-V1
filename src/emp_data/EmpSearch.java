@@ -2,17 +2,23 @@ package emp_data;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import utils.DatabaseConnection;
 import utils.DialogUtils;
 import utils.TableUtils;
+import utils.ImgUtils.ImageDisplayWithResize;
 
 public class EmpSearch extends JFrame implements ActionListener {
   public static DefaultTableModel tableModelSearch;
@@ -21,8 +27,8 @@ public class EmpSearch extends JFrame implements ActionListener {
   private static EmpSearch empsearch;
   private static TableUtils tableutil = new TableUtils(); // Create an instance of EmpTable
 
-  private static String[] column =
-      {"ID", "FIRST NAME", "LAST NAME", "PHONE", "EMAIL", "NID", "POSITION", "DEPARTMENT"};
+  private static String[] column = {"PROFILE", "ID", "FIRST NAME", "LAST NAME", "SEX", "PHONE",
+      "EMAIL", "NID", "POSITION", "DEPARTMENT"};
 
   public EmpSearch() {
     empsearch = this;
@@ -46,8 +52,12 @@ public class EmpSearch extends JFrame implements ActionListener {
     setVisible(false);
 
     // Adjust column widths after populating the table
-    TableUtils.adjustColumnWidth(tableResult, 0, 30);
-    TableUtils.adjustColumnWidth(tableResult, 3, 65);
+    TableUtils.adjustColumnWidth(tableResult, 0, 60);
+    TableUtils.adjustColumnWidth(tableResult, 1, 30);
+    TableUtils.adjustColumnWidth(tableResult, 4, 30);
+    TableUtils.adjustColumnWidth(tableResult, 5, 70);
+
+    TableUtils.adjustRowHeights(tableResult);
 
   }
 
@@ -65,11 +75,11 @@ public class EmpSearch extends JFrame implements ActionListener {
       // Prepare the SQL INSERT statement
       // Prepare the SQL SELECT statement with LIKE clause
       String sql =
-          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
+          "SELECT EMP_IMG, EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SEX, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
               + "FROM Employees " + "WHERE FIRST_NAME LIKE ? OR LAST_NAME LIKE ?";
 
       pstmt = conn.prepareStatement(sql);
-      String searchPattern = "%" + name + "%"; // Pattern for partial match
+      String searchPattern = "%" + name + "%"; // for search like first name or last name
       pstmt.setString(1, searchPattern);
       pstmt.setString(2, searchPattern);
 
@@ -82,15 +92,46 @@ public class EmpSearch extends JFrame implements ActionListener {
 
       while (rs.next()) {
         ArrayList<Object> row = new ArrayList<>();
+        // Retrieve and process the image data
+        Blob blob = rs.getBlob("Emp_Img");
+        ImageIcon imageIcon = null;
+        if (blob != null) {
+          byte[] imageBytes = blob.getBytes(1, (int) blob.length());
+          ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+
+          // Convert byte array to BufferedImage
+          BufferedImage originalImage = null;
+          try {
+            originalImage = ImageIO.read(bis);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+
+          if (originalImage != null) {
+            // Resize the image while maintaining aspect ratio
+            int maxWidth = 60;
+            BufferedImage resizedImage =
+                ImageDisplayWithResize.resizeImageWithAspectRatio(originalImage, maxWidth);
+            imageIcon = new ImageIcon(resizedImage);
+          } else {
+            imageIcon = new ImageIcon(); // Empty icon for missing images
+          }
+        } else {
+          imageIcon = new ImageIcon(); // Empty icon for null blobs
+        }
+
+        row.add(imageIcon);
         row.add(rs.getInt("EMPLOYEE_ID"));
         row.add(rs.getString("FIRST_NAME"));
         row.add(rs.getString("LAST_NAME"));
+        row.add(rs.getString("SEX"));
         row.add(rs.getString("PHONE"));
         row.add(rs.getString("EMAIL"));
         row.add(rs.getString("NID"));
         row.add(rs.getString("POSITION"));
         row.add(rs.getString("DEPARTMENT"));
         tableModelSearch.addRow(row.toArray());
+
       }
 
       // Adjust column widths after populating the table
@@ -129,7 +170,7 @@ public class EmpSearch extends JFrame implements ActionListener {
 
       // Prepare the SQL INSERT statement
       String sql =
-          "SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
+          "SELECT EMP_IMG, EMPLOYEE_ID, FIRST_NAME, LAST_NAME,SEX, PHONE, EMAIL, NID, POSITION, DEPARTMENT "
               + "FROM Employees WHERE EMPLOYEE_ID = ?";
       pstmt = conn.prepareStatement(sql);
       pstmt.setInt(1, id); // Set the ID parameter
@@ -138,9 +179,40 @@ public class EmpSearch extends JFrame implements ActionListener {
 
       while (rs.next()) {
         ArrayList<Object> row = new ArrayList<>();
+
+        // Retrieve and process the image data
+        Blob blob = rs.getBlob("Emp_Img");
+        ImageIcon imageIcon = null;
+        if (blob != null) {
+          byte[] imageBytes = blob.getBytes(1, (int) blob.length());
+          ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+
+          // Convert byte array to BufferedImage
+          BufferedImage originalImage = null;
+          try {
+            originalImage = ImageIO.read(bis);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+
+          if (originalImage != null) {
+            // Resize the image while maintaining aspect ratio
+            int maxWidth = 60;
+            BufferedImage resizedImage =
+                ImageDisplayWithResize.resizeImageWithAspectRatio(originalImage, maxWidth);
+            imageIcon = new ImageIcon(resizedImage);
+          } else {
+            imageIcon = new ImageIcon(); // Empty icon for missing images
+          }
+        } else {
+          imageIcon = new ImageIcon(); // Empty icon for null blobs
+        }
+
+        row.add(imageIcon);
         row.add(rs.getInt("EMPLOYEE_ID"));
         row.add(rs.getString("FIRST_NAME"));
         row.add(rs.getString("LAST_NAME"));
+        row.add(rs.getString("SEX"));
         row.add(rs.getString("PHONE"));
         row.add(rs.getString("EMAIL"));
         row.add(rs.getString("NID"));

@@ -111,6 +111,7 @@ public class ImageUploaderDragDrop {
 
 
 
+    @SuppressWarnings("static-access")
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Drag and Drop Image Uploader");

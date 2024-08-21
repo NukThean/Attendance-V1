@@ -293,10 +293,6 @@ public class EmpTable extends JPanel implements ActionListener {
   public static int getStaffLate() {
     int count = 0;
     LocalDate today = LocalDate.now();
-    // String sql = "SELECT COUNT(*) FROM Attendance AS A "
-    // + "JOIN ShiftSchedule AS S ON A.employee_id = S.employee_id "
-    // + "JOIN Employees E ON A.employee_id = E.employee_id "
-    // + "WHERE A.check_in_time > S.start_shift AND A.date = ?";
 
     String sql = "SELECT COUNT(*) FROM Attendance WHERE Late_in = '1' AND date = ?";
 
@@ -321,10 +317,6 @@ public class EmpTable extends JPanel implements ActionListener {
   public static int getStaffEarlyOut() {
     int count = 0;
     LocalDate today = LocalDate.now();
-    // String sql = "SELECT COUNT(*) FROM Attendance AS A "
-    // + "JOIN ShiftSchedule AS S ON A.employee_id = S.employee_id "
-    // + "JOIN Employees E ON A.employee_id = E.employee_id "
-    // + "WHERE A.check_in_time > S.start_shift AND A.date = ?";
 
     String sql = "SELECT COUNT(*) FROM Attendance WHERE Early_out = '1' AND date = ?";
 
@@ -336,6 +328,30 @@ public class EmpTable extends JPanel implements ActionListener {
       try (ResultSet rs = pstmt.executeQuery()) {
         if (rs.next()) {
           count = rs.getInt(1); // This should give you the number of rows
+        }
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return count;
+  }
+
+  public static int getStaffAbsence() {
+    int count = 0;
+
+    String sql = "SELECT COUNT(*) AS AbsentEmployeeCount " + "FROM Employees e "
+        + "LEFT OUTER JOIN Attendance a " + "ON e.employee_id = a.employee_id "
+        + "AND a.date = CONVERT(DATE, DATEADD(day, -1, GETDATE())) "
+        + "WHERE a.employee_id IS NULL;";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+      try (ResultSet rs = pstmt.executeQuery()) {
+        if (rs.next()) {
+          count = rs.getInt(1); // This will give you the count of absent employees
         }
       }
 

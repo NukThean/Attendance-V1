@@ -18,6 +18,7 @@ public class center extends JPanel implements ActionListener {
   int StaffPresent = EmpTable.getStaffPresent();
   int StaffLate = EmpTable.getStaffLate();
   int StaffEarlyOut = EmpTable.getStaffEarlyOut();
+  int getStaffAbsence = EmpTable.getStaffAbsence();
   // ------------------------------------------
   private JLabel txttop1 = new JLabel("Dashboard");
   private JLabel txttop2 = new JLabel("HR Department");
@@ -32,6 +33,7 @@ public class center extends JPanel implements ActionListener {
   private JLabel staffPresent = new JLabel("" + StaffPresent);
   private JLabel stafflate = new JLabel("" + StaffLate);
   private JLabel staffEarlyOut = new JLabel("" + StaffEarlyOut);
+  private JLabel TminusAbsence = new JLabel("" + getStaffAbsence);
 
   public center() {
     // ---------------------Emoji and Font--------------------
@@ -49,6 +51,7 @@ public class center extends JPanel implements ActionListener {
     staffPresent.setFont(new Font("Times New Roman", Font.PLAIN, 30));
     stafflate.setFont(new Font("Times New Roman", Font.PLAIN, 30));
     staffEarlyOut.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+    TminusAbsence.setFont(new Font("Times New Roman", Font.PLAIN, 30));
 
     todaydate.setForeground(Color.WHITE);
     txttop1.setForeground(Color.WHITE);
@@ -192,6 +195,8 @@ public class center extends JPanel implements ActionListener {
     bbc.gridx++;
     bbc.insets = new Insets(10, 0, 50, 15);
     ccent6.add(absent, bbc);
+    bbc.insets = new Insets(20, 30, 0, 0);
+    ccent6.add(TminusAbsence, bbc);
     // --------------------------------------------------------------------------------------
 
     GridBagConstraints boxinfo = new GridBagConstraints();

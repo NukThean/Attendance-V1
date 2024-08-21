@@ -4,6 +4,7 @@ public class EarlyResult {
   private static long minutesEarly_L;
   private static boolean isEarly;
 
+  @SuppressWarnings("static-access")
   public EarlyResult(long minutesEarly_L, boolean isEarly) {
     this.minutesEarly_L = minutesEarly_L;
     this.isEarly = isEarly;

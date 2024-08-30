@@ -1,7 +1,5 @@
 package emp_data;
 
-import utils.ImgUtils.*;
-import utils.ImgUtils.ImageUploaderDragDrop.FileDropHandler;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -11,11 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.filechooser.FileView;
@@ -23,8 +16,6 @@ import loginpage.User;
 import test.CustomTextField;
 import utils.ConvertTimeFormat;
 import utils.DatabaseConnection;
-import utils.GetTimeDiff;
-import utils.LateResult;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -34,7 +25,6 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.util.Date;
 
 public class EmpInput extends JFrame implements ActionListener {
 
@@ -79,6 +69,15 @@ public class EmpInput extends JFrame implements ActionListener {
 
   static String startShift;
   static String endShift;
+
+  static JCheckBox chkMonday = new JCheckBox("Mon");
+  static JCheckBox chkTuesday = new JCheckBox("Tues");
+  static JCheckBox chkWednesday = new JCheckBox("Wed");
+  static JCheckBox chkThursday = new JCheckBox("Thurs");
+  static JCheckBox chkFriday = new JCheckBox("Fri");
+  static JCheckBox chkSaturday = new JCheckBox("Sat");
+  static JCheckBox chkSunday = new JCheckBox("Sun");
+
 
 
   static File selectedFile;
@@ -171,8 +170,8 @@ public class EmpInput extends JFrame implements ActionListener {
     addlabeltopanel(ccenter, lbldep, err, 0, 1, null);
     addlabeltopanel(ccenter, lblposition, err, 1, 1, null);
     addlabeltopanel(ccenter, lblSshift, err, 2, 1, null);
-    addlabeltopanel(ccenter, lblUploadImg, err, 3, 1, null);
-    addlabeltopanel(ccenter, lblid, err, 4, 1, null); // Add lblid to the panel
+    addlabeltopanel(ccenter, lblUploadImg, err, 4, 1, null);
+    addlabeltopanel(ccenter, lblid, err, 5, 1, null); // Add lblid to the panel
     err.insets = new Insets(0, 300, 0, 0);
 
     err.insets = new Insets(5, 70, 0, 0);
@@ -191,11 +190,11 @@ public class EmpInput extends JFrame implements ActionListener {
     addtxtfieldtopanel(ccenter, txtposition, nghz, 1, 1, null);
     addtxtfieldtopanel(ccenter, txtSshift1, nghz, 2, 1, null);
     addtxtfieldtopanel(ccenter, txtEshift1, nghz, 3, 1, null); // Add txtid to the panel
-    addtxtfieldtopanel(ccenter, txtid, nghz, 4, 1, null); // Add txtid to the panel
+    addtxtfieldtopanel(ccenter, txtid, nghz, 5, 1, null); // Add txtid to the panel
 
     nghz.insets = new Insets(10, 0, 5, 15);
     customSize = new Dimension(200, 30);
-    addtxtfieldtopanel(ccenter, txtFileLocation, nghz, 3, 1, customSize);
+    addtxtfieldtopanel(ccenter, txtFileLocation, nghz, 4, 1, customSize);
 
 
     customSize = new Dimension(20, 30);
@@ -222,6 +221,28 @@ public class EmpInput extends JFrame implements ActionListener {
     nghz.insets = new Insets(10, 305, 5, 0);
     addcomboboxtopanel(ccenter, cmbTime2, nghz, 2, 1, customSize);
 
+
+    // Assuming you are adding these in the constructor
+
+    GridBagConstraints chkConstraints = new GridBagConstraints();
+    chkConstraints.insets = new Insets(10, 0, 5, 330);
+
+    addCheckboxToPanel(ccenter, chkMonday, chkConstraints, 3, 1);
+    chkConstraints.insets = new Insets(10, 0, 5, 220);
+    addCheckboxToPanel(ccenter, chkTuesday, chkConstraints, 3, 1);
+    chkConstraints.insets = new Insets(10, 0, 5, 110);
+    addCheckboxToPanel(ccenter, chkWednesday, chkConstraints, 3, 1);
+    chkConstraints.insets = new Insets(10, 0, 5, 0);
+    addCheckboxToPanel(ccenter, chkThursday, chkConstraints, 3, 1);
+    chkConstraints.insets = new Insets(10, 110, 5, 0);
+    addCheckboxToPanel(ccenter, chkFriday, chkConstraints, 3, 1);
+    chkConstraints.insets = new Insets(10, 210, 5, 0);
+    addCheckboxToPanel(ccenter, chkSaturday, chkConstraints, 3, 1);
+    chkConstraints.insets = new Insets(10, 310, 5, 0);
+    addCheckboxToPanel(ccenter, chkSunday, chkConstraints, 3, 1);
+
+
+
     addButtonToPanel(south, btnmore, nghz, 0, 0);
     addButtonToPanel(south, btnfinish, nghz, 0, 0);
 
@@ -239,7 +260,7 @@ public class EmpInput extends JFrame implements ActionListener {
     btnselectFile.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     nghz.insets = new Insets(5, 270, 0, 0);
     nghz.gridx = 1;
-    nghz.gridy = 3;
+    nghz.gridy = 4;
     south.setBackground(Color.white);
     ccenter.setBackground(Color.white);
     ccenter.add(btnselectFile, nghz);
@@ -326,18 +347,18 @@ public class EmpInput extends JFrame implements ActionListener {
       @Override
       public void drop(DropTargetDropEvent e) {
         try {
-          int id = 1; // Replace with the actual ID logic if needed
+          // int id = 1; // Replace with the actual ID logic if needed
           e.acceptDrop(DnDConstants.ACTION_COPY);
           Transferable transferable = e.getTransferable();
           if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
             java.util.List<?> files =
                 (java.util.List<?>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
             if (!files.isEmpty()) {
-              File file = (File) files.get(0);
-              uploadImage(file.getAbsolutePath(), id);
+              selectedFile = (File) files.get(0);
+              // uploadImage(file.getAbsolutePath(), id);
 
-              txtFileLocation.setText(file.getAbsolutePath());
-              System.out.println("Dropped file: " + file.getAbsolutePath());
+              txtFileLocation.setText(selectedFile.getAbsolutePath());
+              System.out.println("Dropped file: " + selectedFile.getAbsolutePath());
             }
           }
           e.dropComplete(true);
@@ -436,8 +457,8 @@ public class EmpInput extends JFrame implements ActionListener {
       Label.setMinimumSize(size);
       Label.setMaximumSize(size);
     } else {
-      Label.setPreferredSize(new Dimension(78, 30));
-      Label.setMinimumSize(new Dimension(78, 30));
+      Label.setPreferredSize(new Dimension(82, 30));
+      Label.setMinimumSize(new Dimension(82, 30));
     }
     Label.setBackground(Color.WHITE);
     Label.setOpaque(true);
@@ -463,6 +484,14 @@ public class EmpInput extends JFrame implements ActionListener {
     field.setForeground(Color.BLACK);
     panelll.add(field, nghz);
   }
+
+  private void addCheckboxToPanel(JPanel panel, JCheckBox checkbox, GridBagConstraints constraints,
+      int gridy, int gridx) {
+    constraints.gridy = gridy;
+    constraints.gridx = gridx;
+    panel.add(checkbox, constraints);
+  }
+
 
   private void addButtonToPanel(JPanel panel, JButton button, GridBagConstraints nghz, int gridy,
       int gridx) {
@@ -513,6 +542,13 @@ public class EmpInput extends JFrame implements ActionListener {
     txtEshift2.setText("");
     txtSshift1.setText("");
     txtSshift2.setText("");
+    chkMonday.setSelected(false);
+    chkTuesday.setSelected(false);
+    chkWednesday.setSelected(false);
+    chkThursday.setSelected(false);
+    chkFriday.setSelected(false);
+    chkSaturday.setSelected(false);
+    chkSunday.setSelected(false);
     txtFileLocation.setText("Drop or Select Pic");
   }
 
@@ -574,6 +610,10 @@ public class EmpInput extends JFrame implements ActionListener {
             empPstmt.executeUpdate();
 
             uploadImage(txtFileLocation.getText(), employeeId);
+            insertWorkdays(employeeId, chkMonday.isSelected(), chkTuesday.isSelected(),
+                chkWednesday.isSelected(), chkThursday.isSelected(), chkFriday.isSelected(),
+                chkSaturday.isSelected(), chkSunday.isSelected());
+
           }
         }
       }
@@ -609,7 +649,7 @@ public class EmpInput extends JFrame implements ActionListener {
       conn = DatabaseConnection.getConnection();
       String sql = "UPDATE Employees SET Emp_Img = ? WHERE Employee_id = ?";
       pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(2, id); // Assuming Employee ID is 1 for this example
+      pstmt.setInt(2, id);
 
       File file = new File(selectedFile2);
       FileInputStream fis = new FileInputStream(file);
@@ -633,6 +673,31 @@ public class EmpInput extends JFrame implements ActionListener {
       }
     }
   }
+
+  public static void insertWorkdays(int employeeId, boolean isMondaySelected,
+      boolean isTuesdaySelected, boolean isWednesdaySelected, boolean isThursdaySelected,
+      boolean isFridaySelected, boolean isSaturdaySelected, boolean isSundaySelected) {
+    String insertWorkdaysSQL =
+        "INSERT INTO DayShift (employee_id, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(insertWorkdaysSQL)) {
+
+      pstmt.setInt(1, employeeId);
+      pstmt.setBoolean(2, isMondaySelected);
+      pstmt.setBoolean(3, isTuesdaySelected);
+      pstmt.setBoolean(4, isWednesdaySelected);
+      pstmt.setBoolean(5, isThursdaySelected);
+      pstmt.setBoolean(6, isFridaySelected);
+      pstmt.setBoolean(7, isSaturdaySelected);
+      pstmt.setBoolean(8, isSundaySelected);
+
+      pstmt.executeUpdate();
+    } catch (SQLException ex) {
+      ex.printStackTrace();
+    }
+  }
+
 
   @Override
   public void actionPerformed(ActionEvent e) {

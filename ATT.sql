@@ -53,11 +53,14 @@ GO
 CREATE TABLE Leaves (
     leave_id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     employee_id INT NOT NULL,
+    leave_type VARCHAR(20) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    reason VARCHAR(70),
+    reason VARCHAR(250),
     status VARCHAR(10),
-    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
+    approved BIT,
+    approver VARCHAR(50),
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id),
 );
 GO
 
@@ -83,6 +86,19 @@ CREATE TABLE ShiftSchedule (
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
 );
 
+CREATE TABLE DayShift (
+    employee_id INT PRIMARY KEY,
+    sunday BIT,
+    monday BIT,
+    tuesday BIT,
+    wednesday BIT,
+    thursday BIT,
+    friday BIT,
+    saturday BIT,
+    sunday BIT
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
+);
+
 
 
 -- Insert an employee for the admin role
@@ -105,6 +121,10 @@ VALUES (@admin_user_id, 'user');
 
 INSERT INTO ShiftSchedule (employee_id, start_shift, end_shift)
 VALUES (@admin_user_id, '09:00:00', '17:00:00');
+
+INSERT INTO DayShift (employee_id, sunday, monday, tuesday, wednesday, thursday, friday, saturday)
+VALUES (1, 0, 1, 1, 1, 1, 1, 1);
+
 
 /*UPDATE Attendance
 SET lateTimeInMin = DATEDIFF(minute, start_shift, check_in_time)

@@ -38,8 +38,8 @@ public class ImageDisplayWithResize {
                 ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
                 BufferedImage originalImage = ImageIO.read(bis);
 
-                // Resize the image while maintaining aspect ratio
-                BufferedImage resizedImage = resizeImageWithAspectRatio(originalImage, maxWidth);
+                // Resize the image while maintaining aspect ratio with high-quality scaling
+                BufferedImage resizedImage = resizeImageMultiStep(originalImage, maxWidth);
 
                 // Convert BufferedImage to ImageIcon
                 imageIcon = new ImageIcon(resizedImage);
@@ -62,8 +62,8 @@ public class ImageDisplayWithResize {
         return imageIcon;
     }
 
-    // Method to resize BufferedImage while maintaining aspect ratio
-    public static BufferedImage resizeImageWithAspectRatio(BufferedImage originalImage,
+    // Method to resize BufferedImage with high-quality scaling
+    public static BufferedImage resizeImageWithHighQuality(BufferedImage originalImage,
             int maxWidth) {
         int originalWidth = originalImage.getWidth();
         int originalHeight = originalImage.getHeight();
@@ -74,14 +74,53 @@ public class ImageDisplayWithResize {
 
         // Create a new BufferedImage with the new size
         BufferedImage resizedImage =
-                new BufferedImage(newWidth, newHeight, originalImage.getType());
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
-        g.dispose();
+                new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resizedImage.createGraphics();
+
+        // Apply high-quality rendering hints
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Draw the original image scaled to the new size
+        g2d.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+        g2d.dispose();
 
         return resizedImage;
     }
 
+    // Method to resize BufferedImage using multi-step scaling for even better quality
+    public static BufferedImage resizeImageMultiStep(BufferedImage originalImage, int maxWidth) {
+        int targetWidth = maxWidth;
+        int targetHeight =
+                (int) ((double) originalImage.getHeight() / originalImage.getWidth() * targetWidth);
+
+        BufferedImage resizedImage = originalImage;
+
+        // Downscale by half in each step until the target size is reached
+        while (resizedImage.getWidth() > targetWidth || resizedImage.getHeight() > targetHeight) {
+            int intermediateWidth = Math.max(resizedImage.getWidth() / 2, targetWidth);
+            int intermediateHeight = Math.max(resizedImage.getHeight() / 2, targetHeight);
+
+            BufferedImage intermediateImage = new BufferedImage(intermediateWidth,
+                    intermediateHeight, BufferedImage.SCALE_SMOOTH);
+            Graphics2D g2d = intermediateImage.createGraphics();
+
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2d.drawImage(resizedImage, 0, 0, intermediateWidth, intermediateHeight, null);
+            g2d.dispose();
+
+            resizedImage = intermediateImage;
+        }
+
+        return resizedImage;
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -90,7 +129,7 @@ public class ImageDisplayWithResize {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             // Retrieve and resize the image from the database
-            ImageIcon imageIcon = getResizedImageIconFromDatabase(1, 50); // Employee ID and max
+            ImageIcon imageIcon = getResizedImageIconFromDatabase(2, 60); // Employee ID and max
                                                                           // width
 
             // Display the image

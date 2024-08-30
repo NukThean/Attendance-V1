@@ -29,7 +29,10 @@ public class attform extends JPanel {
     // Create JScrollPane with JTable
     scrollpane = tableutil.getScrollPane(table);
 
+    HeaderAtt headerAtt = new HeaderAtt();
+    main.add(headerAtt, BorderLayout.NORTH);
     main.add(scrollpane, BorderLayout.CENTER);
+
     add(main, BorderLayout.CENTER);
     setPreferredSize(new Dimension(894, 688)); // Set the size of the left panel
     setBackground(Color.WHITE);
@@ -80,10 +83,10 @@ public class attform extends JPanel {
         row.add(rs.getInt("ATTENDANCE_ID"));
         row.add(rs.getInt("EMPLOYEE_ID"));
         row.add(rs.getDate("DATE")); // Assuming DATE is a date or timestamp column
-        row.add(rs.getString("CHECK_IN_TIME"));
-        row.add(rs.getString("CHECK_OUT_TIME"));
         row.add(rs.getString("START_SHIFT"));
         row.add(rs.getString("END_SHIFT"));
+        row.add(rs.getString("CHECK_IN_TIME"));
+        row.add(rs.getString("CHECK_OUT_TIME"));
         row.add(rs.getString("TimeDiff_in"));
         row.add(rs.getString("TimeDiff_out"));
         tableModel.addRow(row.toArray());

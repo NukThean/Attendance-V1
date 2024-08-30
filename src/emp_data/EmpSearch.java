@@ -111,7 +111,7 @@ public class EmpSearch extends JFrame implements ActionListener {
             // Resize the image while maintaining aspect ratio
             int maxWidth = 60;
             BufferedImage resizedImage =
-                ImageDisplayWithResize.resizeImageWithAspectRatio(originalImage, maxWidth);
+                ImageDisplayWithResize.resizeImageMultiStep(originalImage, maxWidth);
             imageIcon = new ImageIcon(resizedImage);
           } else {
             imageIcon = new ImageIcon(); // Empty icon for missing images
@@ -199,7 +199,7 @@ public class EmpSearch extends JFrame implements ActionListener {
             // Resize the image while maintaining aspect ratio
             int maxWidth = 60;
             BufferedImage resizedImage =
-                ImageDisplayWithResize.resizeImageWithAspectRatio(originalImage, maxWidth);
+                ImageDisplayWithResize.resizeImageMultiStep(originalImage, maxWidth);
             imageIcon = new ImageIcon(resizedImage);
           } else {
             imageIcon = new ImageIcon(); // Empty icon for missing images

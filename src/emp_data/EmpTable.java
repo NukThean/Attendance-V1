@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -158,7 +159,7 @@ public class EmpTable extends JPanel implements ActionListener {
             // Resize the image while maintaining aspect ratio
             int maxWidth = 60;
             BufferedImage resizedImage =
-                ImageDisplayWithResize.resizeImageWithAspectRatio(originalImage, maxWidth);
+                ImageDisplayWithResize.resizeImageMultiStep(originalImage, maxWidth);
             imageIcon = new ImageIcon(resizedImage);
           } else {
             imageIcon = new ImageIcon(); // Empty icon for missing images
@@ -362,6 +363,49 @@ public class EmpTable extends JPanel implements ActionListener {
     return count;
   }
 
+  public boolean isEmployeeSupposedToWorkToday(int employeeId) {
+    // Step 1: Retrieve DayShift data from the database
+    String query =
+        "SELECT D.sunday, D.monday, D.tuesday, D.wednesday, D.thursday, D.friday, D.saturday"
+            + "FROM ShiftSchedule AS S INNER JOIN DayShift AS D"
+            + "ON S.employee_id = D.employee_id" + "WHERE D.employee_id = ?";
 
+    try (Connection con = DatabaseConnection.getConnection();
+        PreparedStatement preparedStatement = con.prepareStatement(query)) {
+
+      preparedStatement.setInt(1, employeeId);
+      try (ResultSet resultSet = preparedStatement.executeQuery()) {
+        if (resultSet.next()) {
+          // Step 2: Get the current day of the week
+          DayOfWeek currentDay = LocalDate.now().getDayOfWeek();
+
+          // Step 3: Compare the current day with the corresponding day in the result set
+          switch (currentDay) {
+            case SUNDAY:
+              return resultSet.getBoolean("sunday");
+            case MONDAY:
+              return resultSet.getBoolean("monday");
+            case TUESDAY:
+              return resultSet.getBoolean("tuesday");
+            case WEDNESDAY:
+              return resultSet.getBoolean("wednesday");
+            case THURSDAY:
+              return resultSet.getBoolean("thursday");
+            case FRIDAY:
+              return resultSet.getBoolean("friday");
+            case SATURDAY:
+              return resultSet.getBoolean("saturday");
+            default:
+              return false;
+          }
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    // Return false if no result is found or an exception occurs
+    return false;
+  }
 
 }

@@ -10,7 +10,7 @@ public class sidebar extends JPanel implements ActionListener {
   private JButton btnDb = new JButton("Dashboard");
   private JButton btnStaff = new JButton("Employee");
   private JButton btnAtd = new JButton("Attendance");
-  private JButton btnReport = new JButton("Report");
+  private JButton btnLeaveReq = new JButton("Leave Req");
   private JButton btnHelp = new JButton("Help");
   private JButton btnSetting = new JButton("Setting");
   private JButton btnExit = new JButton("Exit");
@@ -46,7 +46,7 @@ public class sidebar extends JPanel implements ActionListener {
     btnDb.setFont(customFont);
     btnStaff.setFont(customFont);
     btnAtd.setFont(customFont);
-    btnReport.setFont(customFont);
+    btnLeaveReq.setFont(customFont);
     btnHelp.setFont(customFont);
     btnSetting.setFont(customFont);
     btnExit.setFont(customFont);
@@ -55,7 +55,7 @@ public class sidebar extends JPanel implements ActionListener {
     gbc.insets = new Insets(5, 15, 5, 15); // Add some spacing between buttons
     addButtonToPanel(buttonPanel, btnStaff, gbc, 1);
     addButtonToPanel(buttonPanel, btnAtd, gbc, 2);
-    addButtonToPanel(buttonPanel, btnReport, gbc, 3);
+    addButtonToPanel(buttonPanel, btnLeaveReq, gbc, 3);
     addButtonToPanel(buttonPanel, btnHelp, gbc, 4);
     addButtonToPanel(buttonPanel, btnSetting, gbc, 5);
     addButtonToPanel(buttonPanel, btnExit, gbc, 6);
@@ -80,7 +80,7 @@ public class sidebar extends JPanel implements ActionListener {
     btnDb.addActionListener(this);
     btnStaff.addActionListener(this);
     btnAtd.addActionListener(this);
-    btnReport.addActionListener(this);
+    btnLeaveReq.addActionListener(this);
     btnHelp.addActionListener(this);
     btnSetting.addActionListener(this);
     btnExit.addActionListener(this);

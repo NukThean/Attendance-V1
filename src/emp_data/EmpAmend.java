@@ -30,7 +30,9 @@ public class EmpAmend extends EmpInput {
         amendFrame.txtphone, amendFrame.txtemail, amendFrame.txtnid, amendFrame.txtposition,
         amendFrame.cmbdep, amendFrame.txtEshift1, amendFrame.txtEshift2, amendFrame.txtSshift1,
         amendFrame.txtSshift2, amendFrame.txtblank1, amendFrame.txtblank2, amendFrame.cmbTime1,
-        amendFrame.cmbTime2, amendFrame.txtFileLocation);
+        amendFrame.cmbTime2, amendFrame.txtFileLocation, amendFrame.chkSunday, amendFrame.chkMonday,
+        amendFrame.chkTuesday, amendFrame.chkWednesday, amendFrame.chkThursday,
+        amendFrame.chkFriday, amendFrame.chkSaturday);
   }
 
   public void showAmendDialog() {
@@ -62,7 +64,8 @@ public class EmpAmend extends EmpInput {
       JTextField txtnid, JTextField txtposition, JComboBox<String> cmbdep, JTextField txtEshift1,
       JTextField txtEshift2, JTextField txtSshift1, JTextField txtSshift2, JTextField txtblank1,
       JTextField txtblank2, JComboBox<String> cmbTime1, JComboBox<String> cmbTime2,
-      JTextField txtFileLocation) {
+      JTextField txtFileLocation, JCheckBox day1, JCheckBox day2, JCheckBox day3, JCheckBox day4,
+      JCheckBox day5, JCheckBox day6, JCheckBox day7) {
 
     Connection conn = null;
     PreparedStatement pstmt = null;
@@ -77,9 +80,11 @@ public class EmpAmend extends EmpInput {
       // FROM Employees WHERE EMPLOYEE_ID = ?";
 
       String sql =
-          "SELECT E.EMP_IMG, E.EMPLOYEE_ID, E.FIRST_NAME, E.LAST_NAME, E.SEX, E.PHONE, E.EMAIL, E.NID, E.POSITION, E.DEPARTMENT, S.start_shift, S.end_shift "
+          "SELECT E.EMP_IMG, E.EMPLOYEE_ID, E.FIRST_NAME, E.LAST_NAME, E.SEX, E.PHONE, E.EMAIL, E.NID, E.POSITION, E.DEPARTMENT, S.start_shift, S.end_shift, "
+              + "D.monday, D.tuesday, D.wednesday, D.thursday, D.friday, D.saturday, D.sunday "
               + "FROM Employees AS E INNER JOIN ShiftSchedule AS S "
-              + "ON E.employee_id = S.employee_id " + "WHERE E.EMPLOYEE_ID = ? ";
+              + "ON E.employee_id = S.employee_id " + "INNER JOIN DayShift AS D "
+              + "ON E.employee_id = D.employee_id " + "WHERE E.EMPLOYEE_ID = ? ";
 
 
       pstmt = conn.prepareStatement(sql);
@@ -98,7 +103,14 @@ public class EmpAmend extends EmpInput {
         String department = rs.getString("DEPARTMENT");
         String startShift24h = rs.getString("start_shift");
         String endShift24h = rs.getString("end_shift");
-        // String fileLocation = rs.getString("emp_img");
+        boolean monday = rs.getBoolean("monday");
+        boolean tuesday = rs.getBoolean("tuesday");
+        boolean wednesday = rs.getBoolean("wednesday");
+        boolean thursday = rs.getBoolean("thursday");
+        boolean friday = rs.getBoolean("Friday");
+        boolean saturday = rs.getBoolean("saturday");
+        boolean sunday = rs.getBoolean("sunday");
+
 
         String startShift12h = ConvertTimeFormat.ConvertTo12h(startShift24h);
         String endShift12h = ConvertTimeFormat.ConvertTo12h(endShift24h);
@@ -138,6 +150,13 @@ public class EmpAmend extends EmpInput {
         txtSshift2.setText(startShift2);
         txtEshift1.setText(endShift1);
         txtEshift2.setText(endShift2);
+        chkMonday.setSelected(monday);
+        chkTuesday.setSelected(tuesday);
+        chkWednesday.setSelected(wednesday);
+        chkThursday.setSelected(thursday);
+        chkFriday.setSelected(friday);
+        chkSaturday.setSelected(saturday);
+        chkSunday.setSelected(sunday);
         txtFileLocation.setText("Drop or Select Pic");
 
         txtblank1.setText(":");

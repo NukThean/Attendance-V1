@@ -166,6 +166,7 @@ public class EmpDelete extends EmpInput {
     PreparedStatement pstmt = null;
     PreparedStatement pstmt2 = null;
     PreparedStatement pstmt3 = null;
+    PreparedStatement pstmt4 = null;
 
     try {
       // Establish the connection
@@ -176,18 +177,22 @@ public class EmpDelete extends EmpInput {
       String sql = "DELETE FROM Employees WHERE EMPLOYEE_ID = ?";
       String sql2 = "DELETE FROM [User] WHERE USER_ID = ?";
       String sql3 = "DELETE FROM ShiftSchedule WHERE EMPLOYEE_ID = ?";
+      String sql4 = "DELETE FROM Attendance WHERE EMPLOYEE_ID = ?";
 
       // Create the PreparedStatement
+      pstmt4 = conn.prepareStatement(sql4);
       pstmt3 = conn.prepareStatement(sql3);
       pstmt2 = conn.prepareStatement(sql2);
       pstmt = conn.prepareStatement(sql);
 
       // Set the parameter for the delete
+      pstmt4.setInt(1, id);
       pstmt3.setInt(1, id);
       pstmt2.setInt(1, id);
       pstmt.setInt(1, id);
 
       // Execute the delete
+      pstmt4.executeUpdate();
       pstmt3.executeUpdate();
       pstmt2.executeUpdate();
       pstmt.executeUpdate();

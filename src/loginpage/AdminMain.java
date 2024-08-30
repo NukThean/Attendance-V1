@@ -1,11 +1,11 @@
 package loginpage;
 
 import javax.swing.*;
-import Admindashboard.center;
+import Admindashboard.center3;
 import Admindashboard.sidebar;
+import LeaveRequest.LeaveReq;
 import attendance.attform;
 import emp_data.*;
-import reportbt.reportform;
 import java.awt.*;
 
 public class AdminMain extends JFrame {
@@ -16,10 +16,10 @@ public class AdminMain extends JFrame {
   public AdminMain() {
     // Initialize the panels
     sidebar leftPanel = new sidebar(this);
-    center centerPanel = new center();
+    center3 centerPanel = new center3();
     EmpTable employeePanel = new EmpTable();
     attform attendancePanel = new attform();
-    reportform reportPanel = new reportform();
+    LeaveReq reportPanel = new LeaveReq();
 
     switchLayout = new CardLayout();
     mainPanel = new JPanel(switchLayout); // card layout inside jpanel
@@ -28,7 +28,7 @@ public class AdminMain extends JFrame {
     mainPanel.add(centerPanel, "Dashboard");
     mainPanel.add(employeePanel, "Employee");
     mainPanel.add(attendancePanel, "Attendance");
-    mainPanel.add(reportPanel, "Report");
+    mainPanel.add(reportPanel, "LeaveReq");
 
     // Add placeholders for other forms (panels)
     mainPanel.add(new JPanel(), "Help");

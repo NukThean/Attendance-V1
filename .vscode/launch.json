@@ -6,6 +6,27 @@
   "configurations": [
     {
       "type": "java",
+      "name": "HeaderAtt",
+      "request": "launch",
+      "mainClass": "attendance.HeaderAtt",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "asdas",
+      "request": "launch",
+      "mainClass": "test.asdas",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "extend",
+      "request": "launch",
+      "mainClass": "test.extend",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
       "name": "ImageUploaderDragDrop",
       "request": "launch",
       "mainClass": "utils.ImgUtils.ImageUploaderDragDrop",

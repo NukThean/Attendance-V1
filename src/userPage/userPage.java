@@ -19,6 +19,7 @@ public class userPage extends JFrame {
   private JButton btnCheckin;
   private JButton btnCheckout;
   private JButton btnviewrec;
+  private JButton btnLeave;
 
   public userPage(User user) {
     this.user = user;
@@ -36,6 +37,7 @@ public class userPage extends JFrame {
     btnCheckin = new JButton("Check in");
     btnCheckout = new JButton("Check out");
     btnviewrec = new JButton("View own Record");
+    btnLeave = new JButton("Request Leave");
 
     lblName.setFont(new Font("Times New Roman", Font.PLAIN, 20));
     lblName.setForeground(Color.WHITE);
@@ -51,11 +53,13 @@ public class userPage extends JFrame {
     btnCheckin.addActionListener(this::handleCheckin);
     btnCheckout.addActionListener(this::handleCheckout);
     btnviewrec.addActionListener(this::handleViewRecord);
+    btnLeave.addActionListener(this::handleRequestLeave);
 
     JPanel buttonPanel = new JPanel(new FlowLayout());
     buttonPanel.add(btnCheckin);
     buttonPanel.add(btnCheckout);
     buttonPanel.add(btnviewrec);
+    buttonPanel.add(btnLeave);
 
     northPanel.add(lblName, us);
 
@@ -97,6 +101,13 @@ public class userPage extends JFrame {
   private void handleViewRecord(ActionEvent e) {
     new viewRecord(user).setVisible(true);
   }
+
+  private void handleRequestLeave(ActionEvent e) {
+    // Create an instance of UserLeaveReq
+    new UserLeaveReq(user);
+
+  }
+
 
   private void checkIn(int userId) {
     String sql =

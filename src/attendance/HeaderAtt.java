@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 public class HeaderAtt extends JPanel {
   JLabel label1 = new JLabel("Recent Attendance");
   JButton btn1 = new JButton("Sort by ID");
+  JButton btn2 = new JButton("Sort by Dep");
 
   public HeaderAtt() {
     label1.setFont(new Font("Times New Roman", Font.PLAIN, 17));
@@ -24,13 +25,31 @@ public class HeaderAtt extends JPanel {
     btn1.setMargin(new Insets(0, 5, 0, 5));
     btn1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+    btn2.setPreferredSize(new Dimension(100, 25));
+    btn2.setMinimumSize(new Dimension(100, 25));
+    btn2.setBackground(Color.LIGHT_GRAY);
+    btn2.setFocusPainted(false);
+    btn2.setMargin(new Insets(0, 5, 0, 5));
+    btn2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
     // Add ActionListener to btn1
     btn1.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         // Code to sort attendance by ID
-        SortByEmp.showSearchIDDialog();
+        SortByEmp sortbyEmp = new SortByEmp();
+        sortbyEmp.showSortIdDialog();
 
+      }
+    });
+
+    btn2.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        // Create an instance of SortByEmp
+        SortByDep sortByDep = new SortByDep();
+        // Show the department sorting dialog
+        sortByDep.showSortDepDialog();
       }
     });
 
@@ -48,6 +67,8 @@ public class HeaderAtt extends JPanel {
     MainHeader.add(label1, constraints);
     constraints.anchor = GridBagConstraints.SOUTHEAST;
     MainHeader.add(btn1, constraints);
+    constraints.gridx++;
+    MainHeader.add(btn2, constraints);
 
     add(MainHeader, BorderLayout.CENTER);
     setPreferredSize(new Dimension(894, 80));

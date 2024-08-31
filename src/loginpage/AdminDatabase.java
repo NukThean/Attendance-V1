@@ -122,11 +122,6 @@ public class AdminDatabase {
     }
   }
 
-  private static String promptForPassword() {
-    return JOptionPane.showInputDialog(null, "Please enter a new password:", "Password Required",
-        JOptionPane.PLAIN_MESSAGE);
-  }
-
   private static String hashPassword(String password, String salt, String pepper) {
     if (pepper == null) {
       throw new IllegalStateException("Pepper value is not set.");
@@ -176,5 +171,10 @@ public class AdminDatabase {
     // Update the password and salt in the database
     updatePassword(userId, hashedNewPassword, salt);
     return hashedNewPassword;
+  }
+
+  private static String promptForPassword() {
+    return JOptionPane.showInputDialog(null, "Please enter a new password:", "Password Required",
+        JOptionPane.PLAIN_MESSAGE);
   }
 }

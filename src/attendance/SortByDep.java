@@ -2,7 +2,7 @@ package attendance;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import emp_data.EmpDelete;
+import loginpage.User;
 import utils.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,20 +13,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SortByEmp extends JFrame implements ActionListener {
-  String[] column = {"no.", "att_id", "date", "shift_in", "shift_out", "check_in_time",
+public class SortByDep extends JFrame implements ActionListener {
+  String[] column = {"no.", "att_id", "emp_id", "date", "shift_in", "shift_out", "check_in_time",
       "check_out_time", "TimeDiff_in", "TimeDiff_out"};
 
+
   private JTable table;
-  private static DefaultTableModel tableModel;
+  private DefaultTableModel tableModel;
   private JScrollPane scrollpane;
   private static JLabel lblid = new JLabel("");
 
   JLabel lbldep = new JLabel("Department");
+  private static JComboBox<String> cmbdep = new JComboBox<>();
   private static JComboBox<String> cmbMonth = new JComboBox<>();
   private static JComboBox<String> cmbYear = new JComboBox<>();
 
-  public SortByEmp() {
+  public SortByDep() {
     setLayout(new BorderLayout());
     lblid.setBackground(Color.BLACK);
 
@@ -40,7 +42,7 @@ public class SortByEmp extends JFrame implements ActionListener {
     JPanel mainPanel = new JPanel(new BorderLayout());
     JPanel namePanel = new JPanel(new BorderLayout());
     namePanel.setPreferredSize(new Dimension(894, 50));
-    namePanel.add(lblid, BorderLayout.WEST);
+    namePanel.add(lbldep, BorderLayout.WEST);
     mainPanel.add(scrollpane, BorderLayout.CENTER);
 
 
@@ -57,15 +59,13 @@ public class SortByEmp extends JFrame implements ActionListener {
     setVisible(false);
   }
 
-  public static void HandleSortByEmpID(int userId, int month, int year) {
-    // Create an instance of SortByEmp
-    String empName = EmpDelete.getStaffNameById(userId);
-    SortByEmp.SortByEmpID(userId, month, year);
-    lblid.setText("<html>ID: " + userId + "<br>Name: " + empName + "</html>");
-  }
-
-
   private static void loadComboBox() {
+    // Sample departments, replace with actual department names from your database
+    // or configuration
+    String[] departments = User.getDepartment();
+    for (String dep : departments) {
+      cmbdep.addItem(dep);
+    }
 
     String[] month = {"January", "February", "March", "April", "May", "June", "July", "August",
         "September", "October", "November", "December"};
@@ -79,12 +79,18 @@ public class SortByEmp extends JFrame implements ActionListener {
     }
   }
 
-  public void showSortIdDialog() {
+  public void handleSortDep(String department, int month, int year) {
+    System.out.println("Sort requested for ID: " + department);
+    SortByDepartment(department, month, year);
+    lbldep.setText("Monthly Report for Department: " + department);
+  }
+
+
+  public void showSortDepDialog() {
     JFrame frame = new JFrame("Sort");
     JPanel panel1 = new JPanel(new GridBagLayout());
     JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
     JLabel label = new JLabel("Choose option to sort");
-    JTextField txtId = new JTextField();
     loadComboBox();
 
 
@@ -92,17 +98,16 @@ public class SortByEmp extends JFrame implements ActionListener {
     Font customFont = new Font("Times New Roman", Font.PLAIN, 16);
 
     label.setFont(customFont);
+    cmbdep.setFont(customFont);
     cmbMonth.setFont(customFont);
     cmbYear.setFont(customFont);
-    txtId.setFont(customFont);
 
+    cmbdep.setPreferredSize(new Dimension(120, 20));
+    cmbdep.setMinimumSize(new Dimension(120, 20));
     cmbMonth.setPreferredSize(new Dimension(120, 20));
     cmbMonth.setMinimumSize(new Dimension(120, 20));
     cmbYear.setPreferredSize(new Dimension(120, 20));
     cmbYear.setMinimumSize(new Dimension(120, 20));
-    txtId.setPreferredSize(new Dimension(120, 20));
-    txtId.setMinimumSize(new Dimension(120, 20));
-
 
     okButton.setBackground(Color.LIGHT_GRAY);
     okButton.setFocusPainted(false);
@@ -114,7 +119,7 @@ public class SortByEmp extends JFrame implements ActionListener {
     panel1.add(label, gbc);
 
     gbc.gridy = 1;
-    panel1.add(txtId, gbc);
+    panel1.add(cmbdep, gbc);
     gbc.gridy++;
     panel1.add(cmbMonth, gbc);
     gbc.gridy++;
@@ -131,8 +136,7 @@ public class SortByEmp extends JFrame implements ActionListener {
     okButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        String selectedId = txtId.getText();
-        int selectedID = Integer.parseInt(selectedId);
+        String selectedDep = (String) cmbdep.getSelectedItem();
 
         String selectedYearString = (String) cmbYear.getSelectedItem();
         int selectedYear = Integer.parseInt(selectedYearString);
@@ -140,15 +144,10 @@ public class SortByEmp extends JFrame implements ActionListener {
         // String selectedMonthString = (String) cmbMonth.getSelectedItem();
         int selectedMonth = cmbMonth.getSelectedIndex() + 1; // Converts to month number
 
-        System.out.println("Selected ID: " + selectedID);
-        System.out.println("Selected Month: " + selectedMonth);
-        System.out.println("Selected Year: " + selectedYear);
-
         // Perform the desired action with the selected item
-        HandleSortByEmpID(selectedID, selectedMonth, selectedYear);
+        handleSortDep(selectedDep, selectedMonth, selectedYear);
         frame.dispose();
         setVisible(true);
-
       }
     });
 
@@ -163,64 +162,91 @@ public class SortByEmp extends JFrame implements ActionListener {
     frame.setVisible(true);
   }
 
-
-
-  private static void SortByEmpID(int userId, int month, int year) {
+  public void SortByDepartment(String departmentName, int month, int year) {
     tableModel.setRowCount(0);
+
 
     LocalDate today = LocalDate.now();
     int daysInMonth = today.withMonth(month).lengthOfMonth();
 
-    // Map to store the data fetched from the database with date as key
-    Map<LocalDate, ArrayList<Object>> dataMap = new HashMap<>();
-
+    // Step 1: Fetch all employees in the department
+    ArrayList<Integer> employeeIds = new ArrayList<>();
     try (Connection conn = DatabaseConnection.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(
-            "SELECT A.ATTENDANCE_ID, A.DATE, S.START_SHIFT, S.END_SHIFT, A.CHECK_IN_TIME, A.CHECK_OUT_TIME, A.TimeDiff_in, A.TimeDiff_out "
-                + "FROM Attendance AS A INNER JOIN ShiftSchedule AS S "
-                + "ON A.EMPLOYEE_ID = S.EMPLOYEE_ID " + "WHERE A.EMPLOYEE_ID = ? "
-                + "AND MONTH(A.DATE) = ? AND YEAR(A.DATE) = ? " + "ORDER BY A.DATE ASC")) {
+        PreparedStatement pstmt =
+            conn.prepareStatement("SELECT EMPLOYEE_ID FROM Employees WHERE DEPARTMENT = ?")) {
 
-      pstmt.setInt(1, userId);
-      pstmt.setInt(2, month);
-      pstmt.setInt(3, year);
-
+      pstmt.setString(1, departmentName);
       ResultSet rs = pstmt.executeQuery();
 
       while (rs.next()) {
-        LocalDate date = rs.getDate("DATE").toLocalDate();
-        ArrayList<Object> row = new ArrayList<>();
-        row.add(rs.getInt("ATTENDANCE_ID"));
-        row.add(rs.getDate("DATE"));
-        row.add(rs.getString("START_SHIFT"));
-        row.add(rs.getString("END_SHIFT"));
-        row.add(rs.getString("CHECK_IN_TIME"));
-        row.add(rs.getString("CHECK_OUT_TIME"));
-        row.add(rs.getString("TimeDiff_in"));
-        row.add(rs.getString("TimeDiff_out"));
-        dataMap.put(date, row);
-
-
+        employeeIds.add(rs.getInt("EMPLOYEE_ID"));
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
 
-    // Fill the table with data, one row per day of the month
-    // LocalDate currentDate = LocalDate.of(year, month, 1);
+    // Initialize the row counter globally
     int rowNum = 1;
-    for (int day = 1; day <= daysInMonth; day++) {
-      LocalDate date = LocalDate.of(year, month, day);
-      ArrayList<Object> rowData = dataMap.getOrDefault(date, getDefaultRowData(date));
-      rowData.add(0, rowNum++);
-      tableModel.addRow(rowData.toArray());
+
+    // Step 2: For each employee, fetch attendance records and populate the table
+    for (int employeeId : employeeIds) {
+      Map<LocalDate, ArrayList<Object>> dataMap = new HashMap<>();
+
+      try (Connection conn = DatabaseConnection.getConnection();
+          PreparedStatement pstmt = conn.prepareStatement(
+              "SELECT A.ATTENDANCE_ID, A.EMPLOYEE_ID, A.DATE, S.START_SHIFT, S.END_SHIFT, A.CHECK_IN_TIME, A.CHECK_OUT_TIME, A.TimeDiff_in, A.TimeDiff_out "
+                  + "FROM Attendance AS A INNER JOIN ShiftSchedule AS S "
+                  + "ON A.EMPLOYEE_ID = S.EMPLOYEE_ID "
+                  + "WHERE A.EMPLOYEE_ID = ? AND MONTH(A.DATE) = ? AND YEAR(A.DATE) = ? "
+                  + "ORDER BY A.DATE ASC")) {
+
+        pstmt.setInt(1, employeeId);
+        pstmt.setInt(2, month);
+        pstmt.setInt(3, year);
+
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+          LocalDate date = rs.getDate("DATE").toLocalDate();
+          ArrayList<Object> row = new ArrayList<>();
+          row.add(rs.getInt("ATTENDANCE_ID")); // att_id
+          row.add(rs.getInt("EMPLOYEE_ID")); // emp_id
+          row.add(rs.getDate("DATE")); // date
+          row.add(rs.getString("START_SHIFT")); // shift_in
+          row.add(rs.getString("END_SHIFT")); // shift_out
+          row.add(rs.getString("CHECK_IN_TIME")); // check_in_time
+          row.add(rs.getString("CHECK_OUT_TIME")); // check_out_time
+          row.add(rs.getString("TimeDiff_in")); // TimeDiff_in
+          row.add(rs.getString("TimeDiff_out")); // TimeDiff_out
+          dataMap.put(date, row);
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+
+      for (int day = 1; day <= daysInMonth; day++) {
+        LocalDate date = LocalDate.of(year, month, day);
+        ArrayList<Object> rowData =
+            dataMap.getOrDefault(date, getDefaultRowData(employeeId, departmentName, date));
+
+        // Ensure the "emp_id" is set if it's null
+        if (rowData.get(1) == null) {
+          rowData.set(1, employeeId); // Set the emp_id column correctly
+        }
+
+        rowData.add(0, rowNum++); // Add row number as the first element
+        tableModel.addRow(rowData.toArray());
+      }
     }
   }
 
-  // Helper method to get a default row with the date and null values for other columns
-  private static ArrayList<Object> getDefaultRowData(LocalDate date) {
+  // Helper method to get a default row with the date, emp_id, department, and null values for other
+  // columns
+  private static ArrayList<Object> getDefaultRowData(int employeeId, String departmentName,
+      LocalDate date) {
     ArrayList<Object> row = new ArrayList<>();
-    row.add(null); // att_id
+    row.add(null); // no.
+    row.add(employeeId); // emp_id (set this correctly initially)
     row.add(Date.valueOf(date)); // date
     row.add(null); // shift_in
     row.add(null); // shift_out
@@ -230,6 +256,8 @@ public class SortByEmp extends JFrame implements ActionListener {
     row.add(null); // TimeDiff_out
     return row;
   }
+
+
 
   @Override
   public void actionPerformed(ActionEvent e) {

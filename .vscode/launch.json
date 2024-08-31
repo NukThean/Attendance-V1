@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "UserLeaveReq",
+      "request": "launch",
+      "mainClass": "userPage.UserLeaveReq",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
       "name": "HeaderAtt",
       "request": "launch",
       "mainClass": "attendance.HeaderAtt",

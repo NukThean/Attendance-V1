@@ -332,6 +332,7 @@ public class UserLogin extends JFrame implements ActionListener {
     switch (State) {
 
       case CHECK_USERID:
+        System.out.println("CASE CHECK USERID");
         if (UserDatabase.CheckuserIdExist(userId)) {
           error = UserDatabase.get_failed_attempts(userId);
           if (error > 2) {
@@ -340,8 +341,6 @@ public class UserLogin extends JFrame implements ActionListener {
                 "User " + userId + " is blocked from login. please contact the system administator",
                 "Error", JOptionPane.ERROR_MESSAGE);
           } else {
-
-            System.out.println("CASE CHECK USERID");
             EnablePW();
           }
 
@@ -368,7 +367,7 @@ public class UserLogin extends JFrame implements ActionListener {
 
 
         } else {
-          System.out.println("ID Exist PW Not Exist");
+          System.out.println("ID Exist & PW Not Exist");
           addPw();
           if (UserDatabase.CheckuserpwExist(userId)) {
             pwPanel.setVisible(true);

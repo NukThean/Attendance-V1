@@ -28,7 +28,7 @@ public class AdminMain extends JFrame {
     mainPanel.add(centerPanel, "Dashboard");
     mainPanel.add(employeePanel, "Employee");
     mainPanel.add(attendancePanel, "Attendance");
-    mainPanel.add(reportPanel, "LeaveReq");
+    mainPanel.add(reportPanel, "Leave Req");
 
     // Add placeholders for other forms (panels)
     mainPanel.add(new JPanel(), "Help");

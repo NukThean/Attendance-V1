@@ -54,12 +54,23 @@ CREATE TABLE Leaves (
     leave_id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     employee_id INT NOT NULL,
     leave_type VARCHAR(20) NOT NULL,
+    application_date DATE NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
+
     reason VARCHAR(250),
-    status VARCHAR(10),
-    approved BIT,
+    status VARCHAR(30),
     approver VARCHAR(50),
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id),
+);
+GO
+
+CREATE TABLE LeavesBalance (
+    employee_id INT PRIMARY KEY NOT NULL,
+    annual_leave FLOAT NOT NULL,
+    sick_leave FLOAT NOT NULL,
+    special_leave FLOAT NOT NULL,
+    block_leave FLOAT NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id),
 );
 GO

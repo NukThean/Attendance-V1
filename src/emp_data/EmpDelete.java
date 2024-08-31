@@ -113,7 +113,7 @@ public class EmpDelete extends EmpInput {
     frame.setVisible(true);
   }
 
-  public String getStaffNameById(int id) {
+  public static String getStaffNameById(int id) {
 
     Connection conn = null;
     PreparedStatement pstmt = null;

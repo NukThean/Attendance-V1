@@ -6,6 +6,48 @@
   "configurations": [
     {
       "type": "java",
+      "name": "ShiftCount",
+      "request": "launch",
+      "mainClass": "Admin.Admindashboard.ShiftCount",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "LeaveReqApp",
+      "request": "launch",
+      "mainClass": "Admin.LeaveRequest.LeaveReqApp",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "LeaveReq",
+      "request": "launch",
+      "mainClass": "Admin.LeaveRequest.LeaveReq",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "LeaveReqApp",
+      "request": "launch",
+      "mainClass": "LeaveRequest.LeaveReqApp",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "LeaveReq",
+      "request": "launch",
+      "mainClass": "LeaveRequest.LeaveReq",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
+      "name": "rowtest",
+      "request": "launch",
+      "mainClass": "test.rowtest",
+      "projectName": "Attendance V1_b87b8139"
+    },
+    {
+      "type": "java",
       "name": "UserLeaveReq",
       "request": "launch",
       "mainClass": "userPage.UserLeaveReq",

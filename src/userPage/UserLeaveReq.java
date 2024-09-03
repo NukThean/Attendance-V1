@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 import loginpage.User;
 import utils.DatabaseConnection;
+import utils.TableUtils;
 
 
 public class UserLeaveReq extends JFrame {
@@ -18,8 +19,8 @@ public class UserLeaveReq extends JFrame {
   private int userId;
   JLabel lblLeaveType = new JLabel("Leave Type: ");
   JLabel lblAppliDate = new JLabel("Application Date: ");
-  JLabel lblStartDate = new JLabel("From: ");
-  JLabel lblEndDate = new JLabel("To: ");
+  JLabel lblStartDate = new JLabel("From (dd-mm-yyyy): ");
+  JLabel lblEndDate = new JLabel("To (dd-mm-yyyy): ");
   JLabel lblNoDay = new JLabel("No. of day(s): ");
   JLabel lblBalanceDue = new JLabel("Balance Due: ");
   JLabel lblReason = new JLabel("Reason: ");
@@ -30,8 +31,12 @@ public class UserLeaveReq extends JFrame {
   static JTextField txtEndDate = new JTextField();
   JTextField txtNoDay = new JTextField();
   JTextField txtBalanceDue = new JTextField();
-  JTextField txtReason = new JTextField();
+  // JTextField txtReason = new JTextField();
   JButton btnSubmit = new JButton("Submit");
+
+  JTextArea txtReason = new JTextArea(20, 20);
+
+  JScrollPane scrollpane = new JScrollPane();
 
   public UserLeaveReq(User user) {
     this.user = user;
@@ -64,11 +69,24 @@ public class UserLeaveReq extends JFrame {
     addtxtfieldtopanel(inputPanel, txtEndDate, err, 3, 1, null);
     addtxtfieldtopanel(inputPanel, txtNoDay, err, 4, 1, null);
     addtxtfieldtopanel(inputPanel, txtBalanceDue, err, 5, 1, null);
-    addtxtfieldtopanel(inputPanel, txtReason, err, 6, 1, null);
+
+    txtReason.setLineWrap(true); // Enable line wrapping
+    txtReason.setWrapStyleWord(true); // Wrap at word boundaries
+    txtReason.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+    TableUtils tableutil = new TableUtils();
+    scrollpane = tableutil.getScrollPane2(txtReason);
+
+    scrollpane.setPreferredSize(new Dimension(150, 100)); // Width and height
+    scrollpane.setMinimumSize(new Dimension(150, 100)); // Width and height
+
+    err.gridx = 1;
+    err.gridy = 6;
+    inputPanel.add(scrollpane, err);
 
 
-    inputPanel.setPreferredSize(new Dimension(450, 360));
-    buttonPanel.setPreferredSize(new Dimension(450, 40));
+    inputPanel.setPreferredSize(new Dimension(400, 460));
+    buttonPanel.setPreferredSize(new Dimension(400, 40));
     buttonPanel.add(btnSubmit);
     // Add the input panel to the MainLeave panel
     MainLeave.add(inputPanel, BorderLayout.CENTER);
@@ -77,7 +95,7 @@ public class UserLeaveReq extends JFrame {
     // Add MainLeave to the content pane
     add(MainLeave, BorderLayout.CENTER);
 
-    setPreferredSize(new Dimension(450, 400));
+    setPreferredSize(new Dimension(400, 500));
     setBackground(Color.WHITE);
     setVisible(true);
     pack(); // This will ensure that the frame is sized correctly
@@ -106,8 +124,8 @@ public class UserLeaveReq extends JFrame {
       Label.setMinimumSize(size);
       Label.setMaximumSize(size);
     } else {
-      Label.setPreferredSize(new Dimension(82, 30));
-      Label.setMinimumSize(new Dimension(82, 30));
+      Label.setPreferredSize(new Dimension(65, 30));
+      Label.setMinimumSize(new Dimension(65, 30));
     }
     Label.setBackground(Color.WHITE);
     Label.setOpaque(true);
@@ -123,12 +141,13 @@ public class UserLeaveReq extends JFrame {
       field.setMinimumSize(size);
       field.setMaximumSize(size);
     } else {
-      field.setPreferredSize(new Dimension(150, 30));
-      field.setMinimumSize(new Dimension(150, 30));
+      field.setPreferredSize(new Dimension(120, 30));
+      field.setMinimumSize(new Dimension(120, 30));
     }
     field.setBackground(Color.white);
     field.setOpaque(true);
     field.setForeground(Color.BLACK);
+    field.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
     panelll.add(field, nghz);
   }
 
@@ -141,11 +160,12 @@ public class UserLeaveReq extends JFrame {
       comboBox.setMinimumSize(size);
       comboBox.setMaximumSize(size);
     } else {
-      comboBox.setPreferredSize(new Dimension(150, 30));
-      comboBox.setMinimumSize(new Dimension(150, 30));
+      comboBox.setPreferredSize(new Dimension(100, 30));
+      comboBox.setMinimumSize(new Dimension(100, 30));
     }
     comboBox.setBackground(Color.white);
     comboBox.setForeground(Color.BLACK);
+    comboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
     panelll.add(comboBox, nghz);
   }
 
@@ -161,7 +181,7 @@ public class UserLeaveReq extends JFrame {
       LocalDate endDate = parseDate(txtEndDate.getText());
 
       if (startDate == null || endDate == null) {
-        JOptionPane.showMessageDialog(this, "Please enter the dates in the format yyyy-MM-dd",
+        JOptionPane.showMessageDialog(this, "Please enter the dates in the format dd-MM-yyyy",
             "Invalid Date Format", JOptionPane.ERROR_MESSAGE);
         return;
       }

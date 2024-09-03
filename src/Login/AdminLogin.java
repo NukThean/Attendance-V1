@@ -3,9 +3,9 @@ package Login;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import loginpage.Admin;
-import loginpage.AdminDatabase;
-import loginpage.AdminMain;
+import Admin.LoginUtils.Admin;
+import Admin.LoginUtils.AdminDatabase;
+import Admin.LoginUtils.AdminMain;
 
 public class AdminLogin extends JFrame implements ActionListener {
 
@@ -63,7 +63,6 @@ public class AdminLogin extends JFrame implements ActionListener {
     JPanel center = new JPanel(new GridBagLayout());
     center.setPreferredSize(new Dimension(400, 200));
     center.setBackground(Color.WHITE);
-
     JPanel north = new JPanel(new GridBagLayout());
     north.setPreferredSize(new Dimension(400, 45));
     north.setBackground(new Color(15, 41, 102));
@@ -410,8 +409,8 @@ public class AdminLogin extends JFrame implements ActionListener {
         user = AdminDatabase.AdminAuthenticate(userId, password);
 
         if (user != null) {
-          System.out
-              .println("User authenticated.\nUserID: " + userId + "\nRole: " + user.getRole());
+          System.out.println("User authenticated.\nUserID: " + userId + "\nRole: " + user.getRole()
+              + "\nName: " + AdminDatabase.getAdminName(Admin.getuserId()));
           showMainApp();;
         } else if (!AdminDatabase.CheckAdminPwTrue(userId, password)) {
           WrongPw();

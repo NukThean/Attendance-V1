@@ -28,7 +28,7 @@ CREATE TABLE Admin (
     admin_id INT PRIMARY KEY,
     password VARCHAR(64) NULL, -- Store hashed passwords
 	salt VARCHAR(32) NULL, --Store salt value
-    last_login DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_login DATETIME,
     failed_attempts INT DEFAULT 0,
     account_status VARCHAR(20) DEFAULT 'active',
     role VARCHAR(15) NOT NULL, -- Add role column
@@ -41,7 +41,7 @@ CREATE TABLE [User] (
     user_id INT PRIMARY KEY,
     password VARCHAR(64) NULL, -- Store hashed passwords
 	salt VARCHAR(32) NULL, --Store salt value
-    last_login DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_login DATETIME,
     failed_attempts INT DEFAULT 0,
     account_status VARCHAR(20) DEFAULT 'active',
     role VARCHAR(15) NOT NULL, -- Add role column
@@ -57,7 +57,6 @@ CREATE TABLE Leaves (
     application_date DATE NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-
     reason VARCHAR(250),
     status VARCHAR(30),
     approver VARCHAR(50),
@@ -67,10 +66,15 @@ GO
 
 CREATE TABLE LeavesBalance (
     employee_id INT PRIMARY KEY NOT NULL,
-    annual_leave FLOAT NOT NULL,
-    sick_leave FLOAT NOT NULL,
-    special_leave FLOAT NOT NULL,
-    block_leave FLOAT NOT NULL,
+    annual_leave FLOAT NULL,
+    sick_leave FLOAT NULL,
+    special_leave FLOAT NULL,
+    block_leave FLOAT NULL,
+
+    remain_annual_leave FLOAT NULL,
+    remain_sick_leave FLOAT NULL,
+    remain_special_leave FLOAT NULL,
+    remain_block_leave FLOAT NULL,
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id),
 );
 GO
@@ -114,7 +118,7 @@ CREATE TABLE DayShift (
 
 -- Insert an employee for the admin role
 INSERT INTO Employees (first_name, last_name, sex, department, position, email, phone, nid)
-VALUES ('CHEA', 'NUKTHEAN','M', 'CEO', 'CEO', 'admin@example.com1', '1234567890', '123456789');
+VALUES ('CHEA', 'NUKTHEAN','M', 'TA', 'HR', 'TT@GMAIL.COM', '1234567890', '123456789');
 
 -- Get the employee_id of the newly inserted admin employee
 DECLARE @admin_employee_id INT = SCOPE_IDENTITY();

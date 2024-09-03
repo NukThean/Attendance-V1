@@ -23,13 +23,39 @@ public class TableUtils extends JPanel {
   }
 
   public DefaultTableModel getTableModel(String[] column) {
-    return new DefaultTableModel(column, 0);
+    return new DefaultTableModel(column, 0) {
+      public boolean isCellEditable(int row, int column) {
+        return false; // Make all cells non-editable
+      }
+    };
+
   }
 
   public JScrollPane getScrollPane(JTable table) {
     JScrollPane scrollpane = new JScrollPane(table);
     scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    scrollpane.getVerticalScrollBar().setBackground(Color.LIGHT_GRAY);
+    scrollpane.getHorizontalScrollBar().setBackground(Color.LIGHT_GRAY);
+    scrollpane.getViewport().setBackground(Color.WHITE);
+    scrollpane.setBackground(Color.WHITE);
+
+    // Set custom components in the corners
+    scrollpane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, createCornerLabel());
+    scrollpane.setCorner(JScrollPane.LOWER_RIGHT_CORNER, createCornerLabel());
+
+    // Customize the UI of the vertical scroll bar to hide arrow buttons
+    customizeScrollBar(scrollpane.getVerticalScrollBar());
+    // Customize the UI of the horizontal scroll bar to hide arrow buttons
+    customizeScrollBar(scrollpane.getHorizontalScrollBar());
+
+    return scrollpane;
+  }
+
+  public JScrollPane getScrollPane2(JTextArea jTextArea) {
+    JScrollPane scrollpane = new JScrollPane(jTextArea);
+    scrollpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    scrollpane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     scrollpane.getVerticalScrollBar().setBackground(Color.LIGHT_GRAY);
     scrollpane.getHorizontalScrollBar().setBackground(Color.LIGHT_GRAY);
     scrollpane.getViewport().setBackground(Color.WHITE);
@@ -167,10 +193,10 @@ public class TableUtils extends JPanel {
     }
   }
 
-  // Custom HeaderRenderer to set column header colors
   private static class CustomHeaderRenderer extends DefaultTableCellRenderer {
     public CustomHeaderRenderer() {
       setOpaque(true);
+      setHorizontalAlignment(SwingConstants.CENTER); // Center the text
     }
 
     @Override
@@ -180,7 +206,13 @@ public class TableUtils extends JPanel {
           super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
       c.setBackground(new Color(15, 41, 102));
       c.setForeground(Color.WHITE);
+      ((JComponent) c).setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.BLACK));
+
+      // Debugging line to check the renderer's properties
+      // System.out.println(c.getClass().getName() + " - Border: " + ((JComponent) c).getBorder());
+
       return c;
     }
   }
+
 }
